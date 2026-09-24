@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+customers =[]
+
 app = FastAPI()
 
 
@@ -19,7 +21,7 @@ def get_customer(customer_id: int):
 
 @app.get("/customers")
 def get_customers(name: str | None = None):
-    return {"name": name}
+    return customers
 
 class CustomerCreate(BaseModel):
     name: str
@@ -27,4 +29,6 @@ class CustomerCreate(BaseModel):
 
 @app.post("/customers", status_code=201)
 def create_customer(customer: CustomerCreate):
+    customers.append(customer)
     return customer
+
