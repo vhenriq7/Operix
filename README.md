@@ -2,73 +2,104 @@
 
 > SaaS de gestão operacional para empresas com múltiplas filiais.
 
-O **Operix** é um projeto de estudo e portfólio focado em desenvolvimento back-end com **Python, FastAPI, PostgreSQL e SQL**.
-
-A proposta é modelar um problema empresarial real: integrar vendas, clientes, conta do cliente, estoque, transferências entre filiais, montagem de cargas, expedição e entregas em uma única plataforma.
-
-## Objetivos do projeto
-
-- Aprender back-end construindo um sistema realista.
-- Praticar Python e SQL em contexto de negócio.
-- Aprender modelagem relacional e PostgreSQL.
-- Construir APIs REST com FastAPI.
-- Aplicar autenticação, autorização e multi-tenancy.
-- Trabalhar com testes, Git, Docker e deploy.
-- Criar um projeto de portfólio com evolução documentada.
-
-## Stack planejada
-
-- **Python**
-- **FastAPI**
-- **PostgreSQL**
-- **SQL**
-- **SQLAlchemy**
-- **Alembic**
-- **Pydantic**
-- **Pytest**
-- **Git & GitHub**
-- **Docker**
-
-## Módulos planejados
-
-- Administração de organizações e filiais
-- Usuários, papéis e permissões
-- Clientes e conta comercial
-- Produtos, preços e estoque por filial
-- Orçamentos e pedidos
-- Pagamentos, créditos, débitos e devoluções
-- Comissões
-- Transferências entre filiais
-- Veículos, cargas e expedição
-- Tentativas de entrega
-- Dashboards gerenciais
+O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto busca integrar vendas, clientes, conta comercial, estoque, transferências entre filiais, cargas e entregas, enquanto o desenvolvimento é usado para aprender Python, APIs, SQL, PostgreSQL e arquitetura de software na prática.
 
 ## Estado atual
 
 **Fase 2 — HTTP, APIs e FastAPI (em andamento).**
 
-A estrutura inicial do back-end já está funcionando com FastAPI. O projeto está praticando os fundamentos de HTTP e APIs antes de conectar um banco de dados.
+Já foram praticados no código:
 
-Atualmente já existem endpoints para:
+- aplicação FastAPI executada com Uvicorn;
+- endpoints `GET` e `POST`;
+- path parameters;
+- query parameters;
+- request body;
+- validação com Pydantic;
+- status codes como `200`, `201` e `422`;
+- Swagger/OpenAPI;
+- armazenamento temporário de clientes em memória.
 
-- verificar se a API está em execução;
-- realizar health check;
-- listar clientes em memória;
-- consultar cliente por `customer_id`;
-- criar cliente com validação de dados usando Pydantic.
+Os clientes em memória desaparecem quando a aplicação reinicia. Isso é intencional nesta fase e prepara o próximo bloco de aprendizagem: persistência com PostgreSQL.
 
-Os dados de clientes ainda são temporários e armazenados apenas em memória. A persistência com PostgreSQL será introduzida em uma fase posterior do roadmap.
+O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP.md).
 
-## Documentação
+## Como navegar pelo projeto
 
-- [Especificação do projeto](PROJECT_SPEC.md) — define o produto, as regras de negócio e os requisitos do Operix.
-- [Roadmap de aprendizagem](LEARNING_ROADMAP.md) — define a ordem de estudo e implementação do projeto.
-- [Instruções para agentes](AGENTS.md) — define como Codex e outros assistentes devem trabalhar neste repositório.
+| Arquivo | Responsabilidade |
+| --- | --- |
+| [AGENTS.md](AGENTS.md) | Como Codex e outros agentes de IA devem trabalhar e ensinar neste repositório |
+| [docs/SPEC.md](docs/SPEC.md) | Requisitos de negócio, regras do SaaS e limites de escopo |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Decisões técnicas, stack e princípios de arquitetura |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases de desenvolvimento, aprendizagem, progresso e critérios de conclusão |
+| `app/` | Código da aplicação |
+| `requirements.txt` | Dependências Python atualmente instaladas |
 
-## Princípio do projeto
+## Estrutura
 
-> Primeiro simples, correto e compreensível. Depois melhorado, refatorado e otimizado.
+```text
+Operix/
+├── AGENTS.md
+├── docs/
+│   ├── SPEC.md
+│   ├── ARCHITECTURE.md
+│   └── ROADMAP.md
+├── app/
+│   └── main.py
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
 
----
+> O `AGENTS.md` fica na raiz de propósito: agentes como Codex procuram instruções `AGENTS.md` a partir da raiz do repositório e ao longo do caminho até o diretório de trabalho.
 
-Projeto desenvolvido para estudo e portfólio.
+## Stack
+
+Resumo atual/planejado:
+
+- Python
+- FastAPI
+- Pydantic
+- Uvicorn
+- PostgreSQL
+- SQL
+- SQLAlchemy
+- Alembic
+- Pytest
+- Git/GitHub
+- Docker
+
+As decisões e o que já está efetivamente adotado estão em [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Executando localmente
+
+Com o ambiente virtual ativo:
+
+```powershell
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+A API fica disponível em:
+
+```text
+http://127.0.0.1:8000
+```
+
+Documentação interativa:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Objetivo de aprendizagem
+
+O projeto segue uma regra simples:
+
+> Primeiro entender. Depois implementar. Depois melhorar.
+
+Assistentes de IA devem atuar em modo professor, com mudanças incrementais e sem inventar regras de negócio. As instruções completas estão em [AGENTS.md](AGENTS.md).
+
+## Princípio de engenharia
+
+> Primeiro simples, correto e compreensível. Depois testável, refatorado e otimizado.

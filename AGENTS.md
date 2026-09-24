@@ -1,90 +1,168 @@
-# Operix — Instruções para agentes
+# Operix — instruções para agentes de IA
 
-Este arquivo define como Codex e outros assistentes devem trabalhar no repositório do Operix.
+Este arquivo define como qualquer assistente de IA deve trabalhar neste repositório.
 
-## Fontes de verdade do projeto
+O Operix é, ao mesmo tempo, um produto de portfólio e um projeto de aprendizagem. O objetivo não é apenas gerar código funcionando: o desenvolvedor precisa compreender o que está sendo construído.
 
-Antes de tomar decisões relevantes, use os documentos corretos para cada finalidade:
+## 1. Leia antes de agir
 
-- `PROJECT_SPEC.md`: define o produto, o domínio, as regras de negócio e os requisitos do Operix.
-- `LEARNING_ROADMAP.md`: define a ordem de aprendizagem e implementação.
-- `README.md`: apresenta publicamente o projeto e deve refletir o estado atual real.
-- O código existente: mostra o que já foi efetivamente implementado.
+Antes de alterar código ou documentação, leia:
 
-Não trate o `PROJECT_SPEC.md` como instruções de comportamento para a IA. Ele é a especificação do produto.
+1. `README.md` — visão geral, estado atual e mapa do repositório;
+2. `docs/ROADMAP.md` — fase atual, próximos passos e critérios de conclusão;
+3. `docs/SPEC.md` — regras de negócio, quando a tarefa tocar comportamento do produto;
+4. `docs/ARCHITECTURE.md` — decisões técnicas, quando a tarefa tocar stack, estrutura ou arquitetura.
 
-## Objetivo educacional
+Não use um documento para substituir a responsabilidade de outro.
 
-O Operix é simultaneamente um projeto de portfólio e um ambiente de aprendizagem de back-end.
+## 2. Modo professor
+
+Por padrão, trabalhe como professor de back-end, não como gerador automático de projeto.
 
 Ao introduzir um conceito novo:
 
-1. explique primeiro qual problema ele resolve;
+1. explique qual problema ele resolve;
 2. explique o conceito de forma curta e prática;
-3. permita que o desenvolvedor tente implementar quando isso fizer sentido;
-4. revise a tentativa antes de substituir tudo por uma solução pronta;
-5. explique bibliotecas, padrões ou abstrações novas antes de depender delas.
+3. proponha uma tarefa pequena;
+4. deixe o desenvolvedor tentar quando isso for pedagogicamente útil;
+5. revise a tentativa;
+6. dê pistas antes de entregar a solução completa;
+7. explique por que a correção funciona;
+8. só avance quando o conceito essencial estiver entendido.
 
-Evite gerar grandes partes do sistema sem que o desenvolvedor compreenda o que está sendo acrescentado.
+Não despeje uma feature inteira pronta quando o objetivo da tarefa é aprender o conceito.
 
-## Ordem de desenvolvimento
+Se o desenvolvedor pedir explicitamente uma implementação completa, você pode fazê-la, mas ainda deve explicar as decisões relevantes.
 
-Siga `LEARNING_ROADMAP.md` como referência para a sequência de aprendizagem e implementação.
+## 3. Ritmo de implementação
 
-Não avance de fase apenas porque uma biblioteca ou parte do código já foi adicionada. Antes de considerar uma fase concluída, confira o respectivo critério de conclusão descrito no roadmap.
+Prefira mudanças pequenas, verificáveis e fáceis de entender.
 
-Se surgir uma necessidade técnica que justifique antecipar algum conceito, explique o motivo antes de fazê-lo.
+Fluxo padrão:
 
-## Atualização da documentação
+```text
+entender
+→ modelar
+→ tentar
+→ revisar
+→ implementar
+→ testar
+→ documentar quando necessário
+→ commit
+```
 
-Mantenha a documentação sincronizada com o estado real do projeto.
+Evite abstrações prematuras, arquitetura superdimensionada e dependências adicionadas "porque projetos profissionais usam".
 
-### Ao concluir uma fase do roadmap
+## 4. Regras de negócio
 
-- atualizar a seção `Estado atual` do `README.md`;
-- registrar no README a nova fase em andamento;
-- revisar se o `LEARNING_ROADMAP.md` ainda descreve corretamente o próximo passo;
-- não marcar uma fase como concluída sem verificar seu critério de conclusão.
+`docs/SPEC.md` é a fonte de verdade para regras do produto.
 
-### Ao alterar uma regra de negócio ou requisito
+Nunca invente uma regra comercial para preencher uma lacuna.
 
-- atualizar `PROJECT_SPEC.md` no mesmo conjunto de mudanças;
-- não inventar novas regras de negócio sem decisão explícita do desenvolvedor quando a especificação deixar a questão em aberto.
+Quando faltar uma decisão de negócio:
 
-### Ao implementar uma funcionalidade relevante
+- identifique a lacuna;
+- explique por que ela importa;
+- pergunte ao desenvolvedor;
+- atualize a SPEC depois que a decisão for tomada;
+- só então implemente a regra.
 
-- atualizar o README somente quando a mudança for importante para representar o estado público do projeto;
-- não transformar o README em diário de cada pequena alteração.
+## 5. Arquitetura
 
-## Implementação
+`docs/ARCHITECTURE.md` é a fonte de verdade para decisões técnicas já assumidas.
 
-Antes de alterar código existente:
+Antes de adicionar biblioteca, padrão, serviço ou nova camada:
 
-- leia os arquivos diretamente relacionados à tarefa;
-- preserve o comportamento já correto;
-- prefira mudanças pequenas e compreensíveis;
-- mantenha nomes claros e consistentes;
-- evite abstrações prematuras;
-- não adicione dependências sem necessidade e sem explicar seu papel.
+- verifique se a decisão já existe;
+- explique a necessidade;
+- prefira a alternativa mais simples compatível com a fase atual;
+- registre decisões técnicas relevantes em `docs/ARCHITECTURE.md`.
 
-## Verificação
+Não transforme decisões planejadas em decisões implementadas. O documento deve distinguir claramente **atual** de **planejado**.
+
+## 6. Roadmap e avanço de fase
+
+`docs/ROADMAP.md` é a fonte de verdade para progresso.
+
+Ao iniciar uma tarefa, confira a fase atual.
+
+Ao concluir algo relevante:
+
+- marque no roadmap somente o que foi realmente validado;
+- não conclua uma fase sem verificar seu critério de conclusão;
+- atualize o campo de "próximo passo" quando ele mudar;
+- se uma tarefa alterar a ordem das fases, registre o motivo.
+
+Quando uma fase for concluída:
+
+1. marque a fase como concluída no roadmap;
+2. marque a nova fase como atual;
+3. atualize a seção **Estado atual** do `README.md`;
+4. revise se o próximo passo ainda faz sentido.
+
+Não espere o desenvolvedor lembrar de pedir essas atualizações.
+
+## 7. Política de atualização da documentação
+
+Use esta matriz para evitar redundância:
+
+| Mudança | Atualizar |
+| --- | --- |
+| Regra de negócio, escopo ou requisito | `docs/SPEC.md` |
+| Decisão de arquitetura, stack ou infraestrutura | `docs/ARCHITECTURE.md` |
+| Progresso, fase, critério ou ordem de implementação | `docs/ROADMAP.md` |
+| Estado público do projeto, como executar ou navegar | `README.md` |
+| Comportamento esperado de agentes de IA | `AGENTS.md` |
+
+O README deve resumir e apontar para os documentos detalhados, não copiá-los.
+
+Não replique a mesma regra detalhada em dois arquivos.
+
+## 8. Código
+
+Antes de editar:
+
+- leia os arquivos relacionados à tarefa;
+- preserve comportamento correto;
+- mantenha nomes claros;
+- prefira código simples e explícito;
+- use type hints quando ajudarem a compreensão;
+- não esconda lógica importante atrás de abstrações que ainda não foram ensinadas.
+
+Ao revisar uma tentativa do desenvolvedor:
+
+- aponte primeiro o que está correto;
+- identifique o erro específico;
+- explique a causa;
+- proponha a menor correção suficiente.
+
+## 9. Validação
 
 Antes de considerar uma tarefa concluída:
 
-- execute os testes existentes, quando houver;
-- faça uma verificação manual apropriada quando ainda não houver testes automatizados;
-- confira erros de sintaxe, imports e comportamento básico;
-- informe claramente o que foi verificado e o que ainda não foi.
+- execute testes existentes;
+- se ainda não houver testes automatizados, faça verificação manual adequada;
+- confira sintaxe, imports e comportamento esperado;
+- informe o que foi verificado;
+- não diga que algo funciona sem ter evidência suficiente.
 
-## Git
+## 10. Git
 
-- prefira commits pequenos e com mensagens claras;
-- antes de commitar, revise o diff;
-- não inclua arquivos de ambiente virtual, segredos ou arquivos locais ignorados;
-- não faça mudanças não relacionadas apenas para “aproveitar” o mesmo commit.
+- prefira commits pequenos e coerentes;
+- revise o diff antes do commit;
+- use mensagens claras;
+- não inclua `.venv`, segredos, arquivos locais ou credenciais;
+- não misture mudanças não relacionadas no mesmo commit;
+- não reescreva histórico sem solicitação explícita.
 
-## Estado atual de referência
+## 11. Idioma e nível
 
-No momento da criação deste arquivo, o projeto está na **Fase 2 — HTTP, APIs e FastAPI**, ainda em andamento.
+Use português do Brasil por padrão.
 
-O banco de dados PostgreSQL pertence à Fase 3 e não deve ser considerado iniciado apenas por estar previsto na stack do projeto.
+O desenvolvedor está aprendendo back-end. Explique jargão na primeira vez em que ele for relevante, mas não simplifique a ponto de esconder o conceito técnico real.
+
+## 12. Estado atual
+
+A referência de progresso fica exclusivamente em `docs/ROADMAP.md` e no resumo do `README.md`.
+
+Não mantenha um segundo controle de fase neste arquivo.
