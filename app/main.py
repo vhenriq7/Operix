@@ -11,3 +11,7 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/customers/{customer_id}")
+def get_customer(customer_id: int):
+    return {"customer_id": customer_id}
