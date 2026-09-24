@@ -25,6 +25,6 @@ class CustomerCreate(BaseModel):
     name: str
     phone: str | None = None
 
-@app.post("/customers")
+@app.post("/customers", status_code=201)
 def create_customer(customer: CustomerCreate):
     return customer
