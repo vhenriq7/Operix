@@ -15,3 +15,7 @@ def health():
 @app.get("/customers/{customer_id}")
 def get_customer(customer_id: int):
     return {"customer_id": customer_id}
+
+@app.get("/customers")
+def get_customers(name: str | None = None):
+    return {"name": name}
