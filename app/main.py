@@ -23,7 +23,7 @@ def get_customers(name: str | None = None):
 
 class CustomerCreate(BaseModel):
     name: str
-    phone: str
+    phone: str | None = None
 
 @app.post("/customers")
 def create_customer(customer: CustomerCreate):
