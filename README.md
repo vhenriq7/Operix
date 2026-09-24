@@ -45,14 +45,25 @@ A proposta é modelar um problema empresarial real: integrar vendas, clientes, c
 
 ## Estado atual
 
-**Fase 0 — Planejamento e preparação do projeto.**
+**Fase 2 — HTTP, APIs e FastAPI (em andamento).**
 
-Nenhuma funcionalidade de produção foi implementada ainda. O projeto será construído de forma incremental, com prioridade para entendimento dos conceitos antes da implementação.
+A estrutura inicial do back-end já está funcionando com FastAPI. O projeto está praticando os fundamentos de HTTP e APIs antes de conectar um banco de dados.
+
+Atualmente já existem endpoints para:
+
+- verificar se a API está em execução;
+- realizar health check;
+- listar clientes em memória;
+- consultar cliente por `customer_id`;
+- criar cliente com validação de dados usando Pydantic.
+
+Os dados de clientes ainda são temporários e armazenados apenas em memória. A persistência com PostgreSQL será introduzida em uma fase posterior do roadmap.
 
 ## Documentação
 
-- [Especificação do projeto](PROJECT_SPEC.md)
-- [Roadmap de aprendizagem](LEARNING_ROADMAP.md)
+- [Especificação do projeto](PROJECT_SPEC.md) — define o produto, as regras de negócio e os requisitos do Operix.
+- [Roadmap de aprendizagem](LEARNING_ROADMAP.md) — define a ordem de estudo e implementação do projeto.
+- [Instruções para agentes](AGENTS.md) — define como Codex e outros assistentes devem trabalhar neste repositório.
 
 ## Princípio do projeto
 
