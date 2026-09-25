@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-customers =[]
+customers = []
 
 app = FastAPI()
 
@@ -17,7 +17,10 @@ def health():
 
 @app.get("/customers/{customer_id}")
 def get_customer(customer_id: int):
-    return {"customer_id": customer_id}
+    if customer_id < 0 or customer_id >= len(customers):
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    return customers[customer_id]
 
 @app.get("/customers")
 def get_customers(name: str | None = None):
@@ -32,3 +35,18 @@ def create_customer(customer: CustomerCreate):
     customers.append(customer)
     return customer
 
+class CustomerUpdate(BaseModel):
+    name: str | None = None
+    phone: str | None = None
+
+@app.patch("/customers/{customer_id}")
+def update_customer(customer_id: int, customer_update: CustomerUpdate):
+    if customer_id < 0 or customer_id >= len(customers):
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    stored_customer = customers[customer_id]
+    update_data = customer_update.model_dump(exclude_unset=True)
+    updated_customer = stored_customer.model_copy(update=update_data)
+    customers[customer_id] = updated_customer
+
+    return updated_customer
