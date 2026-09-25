@@ -6,9 +6,9 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 ## Status geral
 
-**Fase atual:** Fase 2 — HTTP, APIs e FastAPI  
-**Próxima fase:** Fase 3 — PostgreSQL e SQL  
-**Objetivo imediato:** concluir os fundamentos de API antes de introduzir persistência real.
+**Fase atual:** Fase 3 — PostgreSQL e SQL  
+**Próxima fase:** Fase 4 — SQLAlchemy e Alembic  
+**Objetivo imediato:** aprender persistência relacional com SQL antes de conectar a API ao banco.
 
 Legenda:
 
@@ -85,7 +85,7 @@ O desenvolvedor consegue ler e alterar pequenas funções Python e entender as e
 
 ---
 
-## 🟡 Fase 2 — HTTP, APIs e FastAPI
+## ✅ Fase 2 — HTTP, APIs e FastAPI
 
 ### Objetivo
 
@@ -117,7 +117,7 @@ Entender o caminho de uma requisição antes de conectar banco de dados.
 - [x] `PATCH` ou `PUT` em exemplo simples;
 - [x] `DELETE` em exemplo simples;
 - [x] resposta `404 Not Found` criada pela aplicação;
-- [ ] explicar sem ajuda o fluxo completo de uma requisição.
+- [x] explicar sem ajuda o fluxo completo de uma requisição.
 
 ### Critério de conclusão
 
@@ -136,11 +136,11 @@ e entende quando usar GET, POST, PATCH/PUT e DELETE em um CRUD básico.
 
 ### Próximo passo
 
-Consolidar a explicação do fluxo completo de uma requisição em um CRUD básico. Depois iniciar PostgreSQL e SQL.
+Fase concluída. Próximo aprendizado: PostgreSQL e SQL.
 
 ---
 
-## ⬜ Fase 3 — PostgreSQL e SQL
+## 🟡 Fase 3 — PostgreSQL e SQL
 
 ### Objetivo
 

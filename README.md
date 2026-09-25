@@ -6,21 +6,21 @@ O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto 
 
 ## Estado atual
 
-**Fase 2 — HTTP, APIs e FastAPI (em andamento).**
+**Fase 3 — PostgreSQL e SQL (em andamento).**
 
-Já foram praticados no código:
+A fase de fundamentos de API foi concluída. Já foram praticados no código:
 
 - aplicação FastAPI executada com Uvicorn;
-- endpoints `GET` e `POST`;
+- endpoints `GET`, `POST`, `PATCH` e `DELETE`;
 - path parameters;
 - query parameters;
 - request body;
 - validação com Pydantic;
-- status codes como `200`, `201` e `422`;
+- status codes como `200`, `201`, `404` e `422`;
 - Swagger/OpenAPI;
 - armazenamento temporário de clientes em memória.
 
-Os clientes em memória desaparecem quando a aplicação reinicia. Isso é intencional nesta fase e prepara o próximo bloco de aprendizagem: persistência com PostgreSQL.
+Os clientes em memória desaparecem quando a aplicação reinicia. Isso foi intencional na fase de API e agora prepara o próximo bloco de aprendizagem: persistência com PostgreSQL e SQL.
 
 O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP.md).
 
