@@ -114,9 +114,9 @@ Entender o caminho de uma requisição antes de conectar banco de dados.
 
 ### Ainda praticar antes de encerrar
 
-- [ ] `PATCH` ou `PUT` em exemplo simples;
-- [ ] `DELETE` em exemplo simples;
-- [ ] resposta `404 Not Found` criada pela aplicação;
+- [x] `PATCH` ou `PUT` em exemplo simples;
+- [x] `DELETE` em exemplo simples;
+- [x] resposta `404 Not Found` criada pela aplicação;
 - [ ] explicar sem ajuda o fluxo completo de uma requisição.
 
 ### Critério de conclusão
@@ -136,7 +136,7 @@ e entende quando usar GET, POST, PATCH/PUT e DELETE em um CRUD básico.
 
 ### Próximo passo
 
-Completar UPDATE/DELETE e tratamento simples de recurso inexistente. Depois iniciar PostgreSQL e SQL.
+Consolidar a explicação do fluxo completo de uma requisição em um CRUD básico. Depois iniciar PostgreSQL e SQL.
 
 ---
 
