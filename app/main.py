@@ -50,3 +50,12 @@ def atualizar_cliente(cliente_id: int, dados_atualizacao: ClienteAtualizacao):
     clientes[cliente_id] = cliente_atualizado
 
     return cliente_atualizado
+
+@app.delete("/customers/{cliente_id}")
+def deletar_cliente(cliente_id: int):
+   if cliente_id < 0 or cliente_id >= len(clientes):
+       raise HTTPException(status_code=404, detail="Customer not found")
+   else:
+       cliente_removido = clientes.pop(cliente_id)
+       return cliente_removido
+       
