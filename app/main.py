@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-customers = []
+clientes = []
 
 app = FastAPI()
 
@@ -15,38 +15,38 @@ def root():
 def health():
     return {"status": "ok"}
 
-@app.get("/customers/{customer_id}")
-def get_customer(customer_id: int):
-    if customer_id < 0 or customer_id >= len(customers):
+@app.get("/customers/{cliente_id}")
+def buscar_cliente(cliente_id: int):
+    if cliente_id < 0 or cliente_id >= len(clientes):
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    return customers[customer_id]
+    return clientes[cliente_id]
 
 @app.get("/customers")
-def get_customers(name: str | None = None):
-    return customers
+def listar_clientes(name: str | None = None):
+    return clientes
 
-class CustomerCreate(BaseModel):
+class ClienteCriacao(BaseModel):
     name: str
     phone: str | None = None
 
 @app.post("/customers", status_code=201)
-def create_customer(customer: CustomerCreate):
-    customers.append(customer)
-    return customer
+def criar_cliente(cliente: ClienteCriacao):
+    clientes.append(cliente)
+    return cliente
 
-class CustomerUpdate(BaseModel):
+class ClienteAtualizacao(BaseModel):
     name: str | None = None
     phone: str | None = None
 
-@app.patch("/customers/{customer_id}")
-def update_customer(customer_id: int, customer_update: CustomerUpdate):
-    if customer_id < 0 or customer_id >= len(customers):
+@app.patch("/customers/{cliente_id}")
+def atualizar_cliente(cliente_id: int, dados_atualizacao: ClienteAtualizacao):
+    if cliente_id < 0 or cliente_id >= len(clientes):
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    stored_customer = customers[customer_id]
-    update_data = customer_update.model_dump(exclude_unset=True)
-    updated_customer = stored_customer.model_copy(update=update_data)
-    customers[customer_id] = updated_customer
+    cliente_atual = clientes[cliente_id]
+    dados_para_atualizar = dados_atualizacao.model_dump(exclude_unset=True)
+    cliente_atualizado = cliente_atual.model_copy(update=dados_para_atualizar)
+    clientes[cliente_id] = cliente_atualizado
 
-    return updated_customer
+    return cliente_atualizado
