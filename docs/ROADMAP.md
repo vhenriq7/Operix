@@ -146,23 +146,36 @@ Fase concluída. Próximo aprendizado: PostgreSQL e SQL.
 
 Aprender persistência relacional antes de depender de ORM.
 
-### Aprender
+### Já praticado
 
-- banco, tabela, linha e coluna;
-- tipos;
-- primary key;
-- foreign key;
-- `NOT NULL`, `UNIQUE`, `CHECK`;
-- `INSERT`, `SELECT`, `UPDATE`, `DELETE`;
-- `WHERE`, `ORDER BY`;
-- `JOIN`;
-- `GROUP BY` e agregações;
-- transações;
-- índices em nível introdutório.
+- [x] PostgreSQL instalado e acessado com `psql`;
+- [x] criação e conexão com o banco `operix`;
+- [x] banco, tabela, linha e coluna;
+- [x] tipos `INTEGER` e `TEXT`;
+- [x] primary key;
+- [x] id automático com `GENERATED ALWAYS AS IDENTITY`;
+- [x] foreign key;
+- [x] `NOT NULL`, `UNIQUE`, `CHECK`;
+- [x] `INSERT`, `SELECT`, `UPDATE`, `DELETE`;
+- [x] `WHERE`, `ORDER BY`;
+- [x] `JOIN` e `LEFT JOIN`;
+- [x] `GROUP BY`, `COUNT` e agregações simples;
+- [x] tabelas didáticas em português: `organizacoes`, `filiais`, `clientes`.
+
+### Ainda praticar antes de encerrar
+
+- [ ] consultas envolvendo mais de uma organização;
+- [ ] transações;
+- [ ] índices em nível introdutório;
+- [ ] explicar sem ajuda relacionamentos, `JOIN`, `LEFT JOIN`, `GROUP BY` e `COUNT`.
 
 ### Critério de conclusão
 
 Criar tabelas e consultas SQL simples, incluindo relacionamento entre tabelas, sem depender exclusivamente de ORM.
+
+### Próximo passo
+
+Praticar consultas com múltiplas organizações e filiais. Depois introduzir transações e índices em nível introdutório.
 
 ---
 
