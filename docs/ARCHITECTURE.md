@@ -37,13 +37,15 @@ Implementado hoje:
 - `engine`, `SessionLocal` e `get_db` configurados para uso futuro nas rotas;
 - `app/models.py` com models SQLAlchemy iniciais `Organizacao` e `Filial`;
 - relacionamento SQLAlchemy entre organização e filiais;
+- Alembic inicializado com `alembic.ini` e diretório `alembic/`;
+- `alembic/env.py` configurado para usar `DATABASE_URL` e `Base.metadata`;
+- primeira migration versionada criando `organizacoes` e `filiais`;
+- banco local atualizado com `alembic upgrade head`;
 - Git e GitHub.
 
 Ainda não implementado:
 
 - uso da sessão de banco nas rotas da API;
-- configuração do Alembic;
-- migrations versionadas;
 - autenticação;
 - autorização/RBAC;
 - multi-tenancy no código;
@@ -63,7 +65,7 @@ Ainda não implementado:
 | Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
 | Driver PostgreSQL | psycopg | Instalado |
 | ORM | SQLAlchemy | Instalado; conexão, sessão e models iniciais configurados |
-| Migrações | Alembic | Instalado; configuração ainda planejada |
+| Migrações | Alembic | Configurado; primeira migration aplicada |
 | Testes | Pytest | Planejado |
 | Containers | Docker | Planejado |
 | Versionamento | Git + GitHub | Atual |
@@ -129,9 +131,9 @@ filiais
 clientes
 ```
 
-Essas tabelas fazem parte do aprendizado de SQL e ainda não estão conectadas à API.
+Essas tabelas fizeram parte do aprendizado de SQL. Depois, o banco local foi limpo para que o Alembic passasse a controlar a criação do schema versionado.
 
-### Próxima etapa
+### Etapa atual
 
 Conectar a API ao PostgreSQL com SQLAlchemy e Alembic.
 
@@ -163,7 +165,25 @@ Filial
 
 Esses models já representam as tabelas `organizacoes` e `filiais` e possuem relacionamento Python entre organização e filiais. Eles já foram consultados manualmente via SQLAlchemy, mas ainda não são usados pelas rotas da API.
 
-O próximo passo técnico é iniciar o Alembic e criar a primeira migration.
+Alembic foi inicializado com:
+
+```text
+alembic.ini
+alembic/env.py
+alembic/versions/
+```
+
+O `env.py` lê `DATABASE_URL`, usa `Base.metadata` como referência para autogeração e não armazena senha real no repositório.
+
+A primeira migration versionada é:
+
+```text
+81819ad65a8a_cria_tabelas_de_organizacoes_e_filiais.py
+```
+
+Ela cria `organizacoes` e `filiais` no `upgrade()` e remove essas tabelas no `downgrade()`.
+
+O próximo passo técnico é criar rotas da API para inserir e consultar `Organizacao` e `Filial` usando sessão real do banco.
 
 A sequência pedagógica é:
 

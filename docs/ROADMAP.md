@@ -205,14 +205,18 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - [x] models SQLAlchemy criados para `Organizacao` e `Filial`;
 - [x] relacionamento configurado entre `Organizacao.filiais` e `Filial.organizacao`;
 - [x] consultas manuais via SQLAlchemy para `Organizacao`, `Filial` e relacionamento.
+- [x] Alembic inicializado no projeto;
+- [x] `alembic/env.py` configurado para usar `Base.metadata` e `DATABASE_URL`;
+- [x] primeira migration criada e aplicada no PostgreSQL;
+- [x] tabela `alembic_version` verificada com a revision `81819ad65a8a`.
 
 ### Ainda praticar antes de encerrar
 
 - [x] configurar conexão com PostgreSQL;
 - [x] criar sessão de banco;
 - [x] criar models SQLAlchemy para `Organizacao` e `Filial`;
-- [ ] iniciar Alembic;
-- [ ] criar e aplicar primeira migration;
+- [x] iniciar Alembic;
+- [x] criar e aplicar primeira migration;
 - [ ] criar e consultar organizações e filiais pela API usando persistência real;
 - [ ] explicar a diferença entre model de banco e schema de API.
 

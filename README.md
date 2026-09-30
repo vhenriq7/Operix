@@ -24,9 +24,11 @@ As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 - modelagem didática em português com `organizacoes`, `filiais` e `clientes`;
 - dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg;
 - configuração inicial de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`;
-- models SQLAlchemy iniciais em `app/models.py` para `Organizacao` e `Filial`, com relacionamento entre elas.
+- models SQLAlchemy iniciais em `app/models.py` para `Organizacao` e `Filial`, com relacionamento entre elas;
+- Alembic inicializado e configurado para ler `DATABASE_URL` e `Base.metadata`;
+- primeira migration aplicada no PostgreSQL, criando `organizacoes` e `filiais`.
 
-A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é conectar a API ao PostgreSQL usando SQLAlchemy e Alembic.
+A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é fazer rotas da API criarem e consultarem dados persistidos no PostgreSQL.
 
 O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP.md).
 
@@ -50,10 +52,14 @@ Operix/
 │   ├── SPEC.md
 │   ├── ARCHITECTURE.md
 │   └── ROADMAP.md
+├── alembic/
+│   ├── env.py
+│   └── versions/
 ├── app/
 │   ├── database.py
 │   ├── main.py
 │   └── models.py
+├── alembic.ini
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -74,8 +80,8 @@ Resumo atual/planejado:
 | Swagger/OpenAPI | Atual via FastAPI |
 | PostgreSQL | Atual para estudo local |
 | SQL | Atual para estudo manual via `psql` |
-| SQLAlchemy | Instalado; integração com a API em andamento |
-| Alembic | Instalado; migrações ainda serão configuradas |
+| SQLAlchemy | Instalado; conexão, sessão e models iniciais configurados |
+| Alembic | Configurado; primeira migration aplicada |
 | psycopg | Instalado como driver PostgreSQL |
 | Git/GitHub | Atual |
 | Pytest | Planejado |
@@ -99,6 +105,12 @@ $env:DATABASE_URL = "postgresql+psycopg://postgres:SUA_SENHA@localhost:5432/oper
 ```
 
 Não commite senhas reais no repositório.
+
+Para aplicar as migrations no banco configurado:
+
+```powershell
+.\.venv\Scripts\alembic.exe upgrade head
+```
 
 A API fica disponível em:
 
