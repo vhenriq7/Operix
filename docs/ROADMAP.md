@@ -199,11 +199,14 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 
 - [x] dependências instaladas no ambiente virtual: SQLAlchemy, Alembic e psycopg;
 - [x] `requirements.txt` atualizado com as dependências da Fase 4.
+- [x] configuração inicial de conexão em `app/database.py`;
+- [x] criação de `engine`, `SessionLocal` e `get_db`;
+- [x] teste manual de conexão com `SELECT 1`.
 
 ### Ainda praticar antes de encerrar
 
-- [ ] configurar conexão com PostgreSQL;
-- [ ] criar sessão de banco;
+- [x] configurar conexão com PostgreSQL;
+- [x] criar sessão de banco;
 - [ ] criar models SQLAlchemy para `Organizacao` e `Filial`;
 - [ ] iniciar Alembic;
 - [ ] criar e aplicar primeira migration;

@@ -23,6 +23,7 @@ As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 - SQL básico com tabelas, chaves primárias, chaves estrangeiras, restrições, `JOIN`, `GROUP BY`, transações e índices introdutórios;
 - modelagem didática em português com `organizacoes`, `filiais` e `clientes`;
 - dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg.
+- configuração inicial de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`.
 
 A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é conectar a API ao PostgreSQL usando SQLAlchemy e Alembic.
 
@@ -49,6 +50,7 @@ Operix/
 │   ├── ARCHITECTURE.md
 │   └── ROADMAP.md
 ├── app/
+│   ├── database.py
 │   └── main.py
 ├── requirements.txt
 ├── .gitignore
@@ -87,6 +89,14 @@ Com o ambiente virtual ativo:
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+Para usar a configuração de banco da Fase 4, defina `DATABASE_URL` no terminal antes de importar `app.database` ou executar funcionalidades persistentes:
+
+```powershell
+$env:DATABASE_URL = "postgresql+psycopg://postgres:SUA_SENHA@localhost:5432/operix"
+```
+
+Não commite senhas reais no repositório.
 
 A API fica disponível em:
 

@@ -33,13 +33,14 @@ Implementado hoje:
 - SQLAlchemy instalado como dependência;
 - Alembic instalado como dependência;
 - psycopg instalado como driver PostgreSQL;
+- `app/database.py` com leitura de `DATABASE_URL`;
+- `engine`, `SessionLocal` e `get_db` configurados para uso futuro nas rotas;
 - Git e GitHub.
 
 Ainda não implementado:
 
-- integração da API com PostgreSQL;
+- uso da sessão de banco nas rotas da API;
 - models SQLAlchemy;
-- configuração de sessão de banco;
 - configuração do Alembic;
 - migrations versionadas;
 - autenticação;
@@ -60,7 +61,7 @@ Ainda não implementado:
 | Banco relacional | PostgreSQL | Atual para estudo local; integração com a API planejada |
 | Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
 | Driver PostgreSQL | psycopg | Instalado |
-| ORM | SQLAlchemy | Instalado; models ainda planejados |
+| ORM | SQLAlchemy | Instalado; conexão e sessão iniciais configuradas |
 | Migrações | Alembic | Instalado; configuração ainda planejada |
 | Testes | Pytest | Planejado |
 | Containers | Docker | Planejado |
@@ -141,7 +142,18 @@ Alembic
 psycopg
 ```
 
-O próximo passo técnico é configurar a conexão e a sessão de banco antes de criar models e migrations.
+Configuração inicial criada em `app/database.py`:
+
+```text
+DATABASE_URL
+engine
+SessionLocal
+get_db
+```
+
+A URL de conexão deve vir de variável de ambiente. Senhas reais não devem ser commitadas no repositório.
+
+O próximo passo técnico é criar os models SQLAlchemy de `Organizacao` e `Filial`.
 
 A sequência pedagógica é:
 
