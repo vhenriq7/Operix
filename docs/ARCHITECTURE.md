@@ -30,13 +30,18 @@ Implementado hoje:
 - banco local `operix` criado manualmente;
 - SQL praticado manualmente via `psql`;
 - tabelas didáticas em português: `organizacoes`, `filiais` e `clientes`;
+- SQLAlchemy instalado como dependência;
+- Alembic instalado como dependência;
+- psycopg instalado como driver PostgreSQL;
 - Git e GitHub.
 
 Ainda não implementado:
 
 - integração da API com PostgreSQL;
-- SQLAlchemy;
-- Alembic;
+- models SQLAlchemy;
+- configuração de sessão de banco;
+- configuração do Alembic;
+- migrations versionadas;
 - autenticação;
 - autorização/RBAC;
 - multi-tenancy no código;
@@ -54,8 +59,9 @@ Ainda não implementado:
 | Servidor ASGI local | Uvicorn | Atual |
 | Banco relacional | PostgreSQL | Atual para estudo local; integração com a API planejada |
 | Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
-| ORM | SQLAlchemy | Planejado |
-| Migrações | Alembic | Planejado |
+| Driver PostgreSQL | psycopg | Instalado |
+| ORM | SQLAlchemy | Instalado; models ainda planejados |
+| Migrações | Alembic | Instalado; configuração ainda planejada |
 | Testes | Pytest | Planejado |
 | Containers | Docker | Planejado |
 | Versionamento | Git + GitHub | Atual |
@@ -126,6 +132,16 @@ Essas tabelas fazem parte do aprendizado de SQL e ainda não estão conectadas �
 ### Próxima etapa
 
 Conectar a API ao PostgreSQL com SQLAlchemy e Alembic.
+
+As dependências da Fase 4 já foram instaladas:
+
+```text
+SQLAlchemy
+Alembic
+psycopg
+```
+
+O próximo passo técnico é configurar a conexão e a sessão de banco antes de criar models e migrations.
 
 A sequência pedagógica é:
 

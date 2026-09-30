@@ -195,6 +195,21 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - migration;
 - diferença entre modelo de banco e schema de API.
 
+### Já praticado
+
+- [x] dependências instaladas no ambiente virtual: SQLAlchemy, Alembic e psycopg;
+- [x] `requirements.txt` atualizado com as dependências da Fase 4.
+
+### Ainda praticar antes de encerrar
+
+- [ ] configurar conexão com PostgreSQL;
+- [ ] criar sessão de banco;
+- [ ] criar models SQLAlchemy para `Organizacao` e `Filial`;
+- [ ] iniciar Alembic;
+- [ ] criar e aplicar primeira migration;
+- [ ] criar e consultar organizações e filiais pela API usando persistência real;
+- [ ] explicar a diferença entre model de banco e schema de API.
+
 ### Primeiras entidades persistentes
 
 - Organizacao;

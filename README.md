@@ -21,7 +21,8 @@ As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 - armazenamento temporário de clientes em memória;
 - PostgreSQL local com banco `operix`;
 - SQL básico com tabelas, chaves primárias, chaves estrangeiras, restrições, `JOIN`, `GROUP BY`, transações e índices introdutórios;
-- modelagem didática em português com `organizacoes`, `filiais` e `clientes`.
+- modelagem didática em português com `organizacoes`, `filiais` e `clientes`;
+- dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg.
 
 A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é conectar a API ao PostgreSQL usando SQLAlchemy e Alembic.
 
@@ -56,21 +57,25 @@ Operix/
 
 > O `AGENTS.md` fica na raiz de propósito: agentes como Codex procuram instruções `AGENTS.md` a partir da raiz do repositório e ao longo do caminho até o diretório de trabalho.
 
-## Stack
+## Stack e ferramentas
 
 Resumo atual/planejado:
 
-- Python
-- FastAPI
-- Pydantic
-- Uvicorn
-- PostgreSQL
-- SQL
-- SQLAlchemy
-- Alembic
-- Pytest
-- Git/GitHub
-- Docker
+| Tecnologia/ferramenta | Situação |
+| --- | --- |
+| Python | Atual |
+| FastAPI | Atual |
+| Pydantic | Atual |
+| Uvicorn | Atual |
+| Swagger/OpenAPI | Atual via FastAPI |
+| PostgreSQL | Atual para estudo local |
+| SQL | Atual para estudo manual via `psql` |
+| SQLAlchemy | Instalado; integração com a API em andamento |
+| Alembic | Instalado; migrações ainda serão configuradas |
+| psycopg | Instalado como driver PostgreSQL |
+| Git/GitHub | Atual |
+| Pytest | Planejado |
+| Docker | Planejado |
 
 As decisões e o que já está efetivamente adotado estão em [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
