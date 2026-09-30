@@ -6,9 +6,9 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 ## Status geral
 
-**Fase atual:** Fase 3 — PostgreSQL e SQL  
-**Próxima fase:** Fase 4 — SQLAlchemy e Alembic  
-**Objetivo imediato:** aprender persistência relacional com SQL antes de conectar a API ao banco.
+**Fase atual:** Fase 4 — SQLAlchemy e Alembic  
+**Próxima fase:** Fase 5 — Usuários, autenticação e permissões  
+**Objetivo imediato:** conectar a API ao PostgreSQL com persistência organizada, entendendo a relação entre SQL, ORM e migrações.
 
 Legenda:
 
@@ -140,7 +140,7 @@ Fase concluída. Próximo aprendizado: PostgreSQL e SQL.
 
 ---
 
-## 🟡 Fase 3 — PostgreSQL e SQL
+## ✅ Fase 3 — PostgreSQL e SQL
 
 ### Objetivo
 
@@ -164,10 +164,10 @@ Aprender persistência relacional antes de depender de ORM.
 
 ### Ainda praticar antes de encerrar
 
-- [ ] consultas envolvendo mais de uma organização;
-- [ ] transações;
-- [ ] índices em nível introdutório;
-- [ ] explicar sem ajuda relacionamentos, `JOIN`, `LEFT JOIN`, `GROUP BY` e `COUNT`.
+- [x] consultas envolvendo mais de uma organização;
+- [x] transações;
+- [x] índices em nível introdutório;
+- [x] explicar sem ajuda relacionamentos, `JOIN`, `LEFT JOIN`, `GROUP BY` e `COUNT`.
 
 ### Critério de conclusão
 
@@ -175,11 +175,11 @@ Criar tabelas e consultas SQL simples, incluindo relacionamento entre tabelas, s
 
 ### Próximo passo
 
-Praticar consultas com múltiplas organizações e filiais. Depois introduzir transações e índices em nível introdutório.
+Fase concluída. Próximo aprendizado: SQLAlchemy e Alembic.
 
 ---
 
-## ⬜ Fase 4 — SQLAlchemy e Alembic
+## 🟡 Fase 4 — SQLAlchemy e Alembic
 
 ### Objetivo
 
@@ -197,8 +197,8 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 
 ### Primeiras entidades persistentes
 
-- Organization;
-- Branch.
+- Organizacao;
+- Filial.
 
 ### Critério de conclusão
 

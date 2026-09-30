@@ -1,7 +1,7 @@
 # Operix — Arquitetura
 
 **Status:** documento vivo  
-**Última revisão estrutural:** 2026-09-24
+**Última revisão estrutural:** 2026-09-30
 
 Este documento registra decisões técnicas. Requisitos de negócio pertencem a [SPEC.md](SPEC.md); progresso pertence a [ROADMAP.md](ROADMAP.md).
 
@@ -26,11 +26,15 @@ Implementado hoje:
 - API REST inicial;
 - Swagger/OpenAPI gerado pelo FastAPI;
 - armazenamento temporário em lista Python para fins didáticos;
+- PostgreSQL instalado localmente para estudo;
+- banco local `operix` criado manualmente;
+- SQL praticado manualmente via `psql`;
+- tabelas didáticas em português: `organizacoes`, `filiais` e `clientes`;
 - Git e GitHub.
 
 Ainda não implementado:
 
-- PostgreSQL;
+- integração da API com PostgreSQL;
 - SQLAlchemy;
 - Alembic;
 - autenticação;
@@ -48,8 +52,8 @@ Ainda não implementado:
 | API | FastAPI | Atual |
 | Validação | Pydantic | Atual |
 | Servidor ASGI local | Uvicorn | Atual |
-| Banco relacional | PostgreSQL | Planejado |
-| Consultas | SQL | Planejado, antes de depender de ORM |
+| Banco relacional | PostgreSQL | Atual para estudo local; integração com a API planejada |
+| Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
 | ORM | SQLAlchemy | Planejado |
 | Migrações | Alembic | Planejado |
 | Testes | Pytest | Planejado |
@@ -109,15 +113,25 @@ reiniciar a aplicação
 
 Esse mecanismo não é persistência de produção.
 
+Em paralelo, PostgreSQL já foi instalado localmente e o banco `operix` foi usado para praticar SQL manualmente com tabelas didáticas em português:
+
+```text
+organizacoes
+filiais
+clientes
+```
+
+Essas tabelas fazem parte do aprendizado de SQL e ainda não estão conectadas à API.
+
 ### Próxima etapa
 
-PostgreSQL será introduzido após os fundamentos de API.
+Conectar a API ao PostgreSQL com SQLAlchemy e Alembic.
 
 A sequência pedagógica é:
 
 ```text
 SQL e banco relacional
-→ PostgreSQL
+→ PostgreSQL manual via psql
 → integração com a aplicação
 → SQLAlchemy
 → Alembic

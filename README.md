@@ -6,9 +6,9 @@ O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto 
 
 ## Estado atual
 
-**Fase 3 — PostgreSQL e SQL (em andamento).**
+**Fase 4 — SQLAlchemy e Alembic (em andamento).**
 
-A fase de fundamentos de API foi concluída. Já foram praticados no código:
+As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 
 - aplicação FastAPI executada com Uvicorn;
 - endpoints `GET`, `POST`, `PATCH` e `DELETE`;
@@ -18,9 +18,12 @@ A fase de fundamentos de API foi concluída. Já foram praticados no código:
 - validação com Pydantic;
 - status codes como `200`, `201`, `404` e `422`;
 - Swagger/OpenAPI;
-- armazenamento temporário de clientes em memória.
+- armazenamento temporário de clientes em memória;
+- PostgreSQL local com banco `operix`;
+- SQL básico com tabelas, chaves primárias, chaves estrangeiras, restrições, `JOIN`, `GROUP BY`, transações e índices introdutórios;
+- modelagem didática em português com `organizacoes`, `filiais` e `clientes`.
 
-Os clientes em memória desaparecem quando a aplicação reinicia. Isso foi intencional na fase de API e agora prepara o próximo bloco de aprendizagem: persistência com PostgreSQL e SQL.
+A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é conectar a API ao PostgreSQL usando SQLAlchemy e Alembic.
 
 O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP.md).
 
