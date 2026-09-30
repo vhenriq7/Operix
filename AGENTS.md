@@ -155,6 +155,13 @@ Antes de considerar uma tarefa concluída:
 - não misture mudanças não relacionadas no mesmo commit;
 - não reescreva histórico sem solicitação explícita.
 
+Regra específica deste projeto:
+
+- por decisão do desenvolvedor, o agente não deve executar `git commit` nem `git push` por padrão;
+- após implementar ou revisar mudanças autorizadas, o agente deve explicar o que mudou, validar quando possível e fornecer os comandos para o desenvolvedor commitar e enviar;
+- mesmo quando o desenvolvedor escrever "IMPLEMENTE POR MIM", isso autoriza alteração de arquivos, mas não autoriza commit nem push automaticamente;
+- o agente só deve commitar ou enviar para o GitHub se o desenvolvedor pedir explicitamente para fazer commit ou push.
+
 ## 11. Idioma e nível
 
 Use português do Brasil por padrão.
