@@ -35,12 +35,13 @@ Implementado hoje:
 - psycopg instalado como driver PostgreSQL;
 - `app/database.py` com leitura de `DATABASE_URL`;
 - `engine`, `SessionLocal` e `get_db` configurados para uso futuro nas rotas;
+- `app/models.py` com models SQLAlchemy iniciais `Organizacao` e `Filial`;
+- relacionamento SQLAlchemy entre organização e filiais;
 - Git e GitHub.
 
 Ainda não implementado:
 
 - uso da sessão de banco nas rotas da API;
-- models SQLAlchemy;
 - configuração do Alembic;
 - migrations versionadas;
 - autenticação;
@@ -61,7 +62,7 @@ Ainda não implementado:
 | Banco relacional | PostgreSQL | Atual para estudo local; integração com a API planejada |
 | Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
 | Driver PostgreSQL | psycopg | Instalado |
-| ORM | SQLAlchemy | Instalado; conexão e sessão iniciais configuradas |
+| ORM | SQLAlchemy | Instalado; conexão, sessão e models iniciais configurados |
 | Migrações | Alembic | Instalado; configuração ainda planejada |
 | Testes | Pytest | Planejado |
 | Containers | Docker | Planejado |
@@ -153,7 +154,16 @@ get_db
 
 A URL de conexão deve vir de variável de ambiente. Senhas reais não devem ser commitadas no repositório.
 
-O próximo passo técnico é criar os models SQLAlchemy de `Organizacao` e `Filial`.
+Models iniciais criados em `app/models.py`:
+
+```text
+Organizacao
+Filial
+```
+
+Esses models já representam as tabelas `organizacoes` e `filiais` e possuem relacionamento Python entre organização e filiais. Eles já foram consultados manualmente via SQLAlchemy, mas ainda não são usados pelas rotas da API.
+
+O próximo passo técnico é iniciar o Alembic e criar a primeira migration.
 
 A sequência pedagógica é:
 

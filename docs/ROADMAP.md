@@ -202,12 +202,15 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - [x] configuração inicial de conexão em `app/database.py`;
 - [x] criação de `engine`, `SessionLocal` e `get_db`;
 - [x] teste manual de conexão com `SELECT 1`.
+- [x] models SQLAlchemy criados para `Organizacao` e `Filial`;
+- [x] relacionamento configurado entre `Organizacao.filiais` e `Filial.organizacao`;
+- [x] consultas manuais via SQLAlchemy para `Organizacao`, `Filial` e relacionamento.
 
 ### Ainda praticar antes de encerrar
 
 - [x] configurar conexão com PostgreSQL;
 - [x] criar sessão de banco;
-- [ ] criar models SQLAlchemy para `Organizacao` e `Filial`;
+- [x] criar models SQLAlchemy para `Organizacao` e `Filial`;
 - [ ] iniciar Alembic;
 - [ ] criar e aplicar primeira migration;
 - [ ] criar e consultar organizações e filiais pela API usando persistência real;

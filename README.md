@@ -22,8 +22,9 @@ As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 - PostgreSQL local com banco `operix`;
 - SQL básico com tabelas, chaves primárias, chaves estrangeiras, restrições, `JOIN`, `GROUP BY`, transações e índices introdutórios;
 - modelagem didática em português com `organizacoes`, `filiais` e `clientes`;
-- dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg.
-- configuração inicial de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`.
+- dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg;
+- configuração inicial de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`;
+- models SQLAlchemy iniciais em `app/models.py` para `Organizacao` e `Filial`, com relacionamento entre elas.
 
 A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é conectar a API ao PostgreSQL usando SQLAlchemy e Alembic.
 
@@ -51,7 +52,8 @@ Operix/
 │   └── ROADMAP.md
 ├── app/
 │   ├── database.py
-│   └── main.py
+│   ├── main.py
+│   └── models.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
