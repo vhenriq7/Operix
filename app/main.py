@@ -1,5 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
+
+from app.database import get_db
+from app.models import Organizacao
+from sqlalchemy.orm import Session
 
 clientes = []
 
@@ -57,5 +61,18 @@ def deletar_cliente(cliente_id: int):
        raise HTTPException(status_code=404, detail="Customer not found")
    else:
        cliente_removido = clientes.pop(cliente_id)
-       return cliente_removido
-       
+       return cliente_removido  
+
+@app.get('/organizacoes')
+def listar_organizacoes(sessao: Session = Depends(get_db)):
+    organizacoes = sessao.query(Organizacao).all()
+    resposta = []
+    for organizacao in organizacoes:
+        resposta.append({
+            "id": organizacao.id,
+            "nome":organizacao.nome,
+        }) 
+    return resposta
+
+
+
