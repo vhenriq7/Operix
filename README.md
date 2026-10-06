@@ -12,23 +12,27 @@ As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
 
 - aplicação FastAPI executada com Uvicorn;
 - endpoints `GET`, `POST`, `PATCH` e `DELETE`;
-- path parameters;
-- query parameters;
-- request body;
+- parâmetros de caminho;
+- parâmetros de consulta;
+- corpo da requisição;
 - validação com Pydantic;
-- status codes como `200`, `201`, `404` e `422`;
+- códigos de resposta HTTP como `200`, `201`, `404` e `422`;
 - Swagger/OpenAPI;
 - armazenamento temporário de clientes em memória;
 - PostgreSQL local com banco `operix`;
 - SQL básico com tabelas, chaves primárias, chaves estrangeiras, restrições, `JOIN`, `GROUP BY`, transações e índices introdutórios;
 - modelagem didática em português com `organizacoes`, `filiais` e `clientes`;
 - dependências iniciais da Fase 4 instaladas: SQLAlchemy, Alembic e psycopg;
-- configuração inicial de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`;
-- models SQLAlchemy iniciais em `app/models.py` para `Organizacao` e `Filial`, com relacionamento entre elas;
+- conexão e sessões de banco em `app/database.py` com `DATABASE_URL`, `engine`, `SessionLocal` e `get_db`;
+- modelos SQLAlchemy em `app/models.py` para `Organizacao` e `Filial`, com relacionamento entre elas;
 - Alembic inicializado e configurado para ler `DATABASE_URL` e `Base.metadata`;
-- primeira migration aplicada no PostgreSQL, criando `organizacoes` e `filiais`.
+- primeira migração aplicada no PostgreSQL, criando `organizacoes` e `filiais`;
+- cadastro e listagem de organizações e filiais pela API, com persistência no PostgreSQL;
+- verificação da existência da organização antes de cadastrar uma filial, com resposta `404` quando ela não é encontrada.
 
-A API ainda usa lista em memória para clientes. Isso foi intencional nas fases iniciais; o próximo bloco de aprendizagem é fazer rotas da API criarem e consultarem dados persistidos no PostgreSQL.
+Clientes continuam armazenados em uma lista em memória para fins didáticos. Organizações e filiais já são cadastradas e consultadas no PostgreSQL por meio do SQLAlchemy.
+
+A API é destinada ao estudo local nesta etapa. Autenticação e isolamento de dados entre organizações ainda não foram implementados.
 
 O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP.md).
 
@@ -78,11 +82,11 @@ Resumo atual/planejado:
 | Pydantic | Atual |
 | Uvicorn | Atual |
 | Swagger/OpenAPI | Atual via FastAPI |
-| PostgreSQL | Atual para estudo local |
+| PostgreSQL | Atual; integrado à API para organizações e filiais |
 | SQL | Atual para estudo manual via `psql` |
-| SQLAlchemy | Instalado; conexão, sessão e models iniciais configurados |
-| Alembic | Configurado; primeira migration aplicada |
-| psycopg | Instalado como driver PostgreSQL |
+| SQLAlchemy | Atual; modelos e sessões usados no cadastro e na listagem pela API |
+| Alembic | Configurado; primeira migração aplicada |
+| psycopg | Atual; driver de conexão com PostgreSQL |
 | Git/GitHub | Atual |
 | Pytest | Planejado |
 | Docker | Planejado |
@@ -91,26 +95,43 @@ As decisões e o que já está efetivamente adotado estão em [docs/ARCHITECTURE
 
 ## Executando localmente
 
-Com o ambiente virtual ativo:
+Execute os comandos abaixo na raiz do projeto, com o ambiente virtual ativo. O PostgreSQL deve estar em execução e o banco `operix` deve existir. Não é necessário manter o `psql` aberto.
+
+### 1. Instalar as dependências
 
 ```powershell
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Para usar a configuração de banco da Fase 4, defina `DATABASE_URL` no terminal antes de importar `app.database` ou executar funcionalidades persistentes:
+### 2. Configurar a conexão com o banco
+
+Defina `DATABASE_URL` antes de executar o Alembic ou iniciar a API. A senha é solicitada sem aparecer no terminal, e os caracteres especiais são codificados para montar a URL:
 
 ```powershell
-$env:DATABASE_URL = "postgresql+psycopg://postgres:SUA_SENHA@localhost:5432/operix"
+$senhaBanco = Read-Host "Senha do usuario postgres" -AsSecureString
+$senhaUrl = [uri]::EscapeDataString([System.Net.NetworkCredential]::new("", $senhaBanco).Password)
+$env:DATABASE_URL = "postgresql+psycopg://postgres:${senhaUrl}@localhost:5432/operix"
 ```
 
-Não commite senhas reais no repositório.
+A variável é definida para essa sessão do PowerShell; configure-a novamente ao abrir um novo terminal. Codificar a senha não a torna secreta: não compartilhe o conteúdo de `DATABASE_URL` nem inclua credenciais reais em commits.
 
-Para aplicar as migrations no banco configurado:
+### 3. Aplicar as migrações
+
+Com a conexão configurada, aplique as migrações pendentes:
 
 ```powershell
 .\.venv\Scripts\alembic.exe upgrade head
 ```
+
+### 4. Iniciar a API
+
+No mesmo terminal:
+
+```powershell
+.\.venv\Scripts\uvicorn.exe app.main:app --reload
+```
+
+Mantenha o terminal aberto enquanto usar a API. Para encerrar o servidor, pressione `Ctrl+C`.
 
 A API fica disponível em:
 

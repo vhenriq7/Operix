@@ -8,7 +8,7 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 **Fase atual:** Fase 4 — SQLAlchemy e Alembic  
 **Próxima fase:** Fase 5 — Usuários, autenticação e permissões  
-**Objetivo imediato:** conectar a API ao PostgreSQL com persistência organizada, entendendo a relação entre SQL, ORM e migrações.
+**Objetivo imediato:** consolidar a integração já implementada com PostgreSQL e explicar a diferença entre modelo de banco e schema de API antes de encerrar a Fase 4.
 
 Legenda:
 
@@ -209,6 +209,21 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - [x] `alembic/env.py` configurado para usar `Base.metadata` e `DATABASE_URL`;
 - [x] primeira migration criada e aplicada no PostgreSQL;
 - [x] tabela `alembic_version` verificada com a revision `81819ad65a8a`.
+- [x] cadastro e listagem de organizações pela API usando sessão SQLAlchemy;
+- [x] cadastro e listagem de filiais pela API usando sessão SQLAlchemy;
+- [x] verificação da existência da organização antes de cadastrar uma filial;
+- [x] tratamento de URL codificada na configuração do Alembic.
+
+### Validações realizadas
+
+- `POST /organizacoes/` retornou `201` com `id` e `nome`; o cadastro apareceu depois em `GET /organizacoes`, com `200`;
+- `POST /organizacoes/` com corpo `{}` retornou `422` por ausência do campo obrigatório `nome`;
+- `POST /filiais` com organização inexistente retornou `404`;
+- `POST /filiais` com organização existente retornou `201`; a filial salva apareceu depois em `GET /filiais`, com `200`;
+- o Alembic preservou uma URL fictícia codificada e gerou SQL em modo offline, sem acessar o banco;
+- a ausência de `DATABASE_URL` manteve o erro esperado, e `alembic current` no banco local confirmou `81819ad65a8a (head)`.
+
+Essas verificações foram manuais ou pontuais; ainda não há uma suíte de testes automatizados no projeto.
 
 ### Ainda praticar antes de encerrar
 
@@ -217,7 +232,7 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - [x] criar models SQLAlchemy para `Organizacao` e `Filial`;
 - [x] iniciar Alembic;
 - [x] criar e aplicar primeira migration;
-- [ ] criar e consultar organizações e filiais pela API usando persistência real;
+- [x] criar e consultar organizações e filiais pela API usando persistência real;
 - [ ] explicar a diferença entre model de banco e schema de API.
 
 ### Primeiras entidades persistentes
@@ -228,6 +243,10 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 ### Critério de conclusão
 
 Criar e consultar organizações e filiais persistidas no PostgreSQL e reproduzir o schema por migração.
+
+### Próximo passo
+
+O fluxo persistente e a criação das tabelas por migração já foram validados. A fase permanece em andamento até concluir a revisão conceitual: explicar, com palavras próprias, os papéis do schema Pydantic de entrada, do modelo SQLAlchemy e da sessão no cadastro de uma entidade. Depois dessa revisão, conferir o encerramento da Fase 4 antes de iniciar autenticação e permissões.
 
 ---
 

@@ -1,7 +1,7 @@
 # Operix — Arquitetura
 
 **Status:** documento vivo  
-**Última revisão estrutural:** 2026-09-30
+**Última atualização:** 2026-10-06
 
 Este documento registra decisões técnicas. Requisitos de negócio pertencem a [SPEC.md](SPEC.md); progresso pertence a [ROADMAP.md](ROADMAP.md).
 
@@ -25,27 +25,30 @@ Implementado hoje:
 - Pydantic;
 - API REST inicial;
 - Swagger/OpenAPI gerado pelo FastAPI;
-- armazenamento temporário em lista Python para fins didáticos;
-- PostgreSQL instalado localmente para estudo;
+- armazenamento temporário de clientes em lista Python para fins didáticos;
+- PostgreSQL local integrado à API para organizações e filiais;
 - banco local `operix` criado manualmente;
 - SQL praticado manualmente via `psql`;
-- tabelas didáticas em português: `organizacoes`, `filiais` e `clientes`;
-- SQLAlchemy instalado como dependência;
-- Alembic instalado como dependência;
-- psycopg instalado como driver PostgreSQL;
+- estudo prévio de SQL com tabelas didáticas `organizacoes`, `filiais` e `clientes`;
+- SQLAlchemy usado para consultas e cadastros persistentes;
+- Alembic usado para versionar o schema do banco;
+- psycopg usado como driver PostgreSQL;
 - `app/database.py` com leitura de `DATABASE_URL`;
-- `engine`, `SessionLocal` e `get_db` configurados para uso futuro nas rotas;
+- `engine`, `SessionLocal` e `get_db` usados nas rotas persistentes;
 - `app/models.py` com models SQLAlchemy iniciais `Organizacao` e `Filial`;
 - relacionamento SQLAlchemy entre organização e filiais;
 - Alembic inicializado com `alembic.ini` e diretório `alembic/`;
 - `alembic/env.py` configurado para usar `DATABASE_URL` e `Base.metadata`;
 - primeira migration versionada criando `organizacoes` e `filiais`;
 - banco local atualizado com `alembic upgrade head`;
+- cadastro e listagem de organizações e filiais pela API;
+- schemas Pydantic `OrganizacaoCriacao` e `FilialCriacao` para validar os dados de entrada;
+- verificação da organização vinculada antes do cadastro de uma filial;
+- escape de `%` na configuração do Alembic para aceitar URLs codificadas;
 - Git e GitHub.
 
 Ainda não implementado:
 
-- uso da sessão de banco nas rotas da API;
 - autenticação;
 - autorização/RBAC;
 - multi-tenancy no código;
@@ -53,7 +56,7 @@ Ainda não implementado:
 - Docker;
 - deploy.
 
-## 3. Stack planejada
+## 3. Stack atual e planejada
 
 | Área | Tecnologia | Situação |
 | --- | --- | --- |
@@ -61,10 +64,10 @@ Ainda não implementado:
 | API | FastAPI | Atual |
 | Validação | Pydantic | Atual |
 | Servidor ASGI local | Uvicorn | Atual |
-| Banco relacional | PostgreSQL | Atual para estudo local; integração com a API planejada |
-| Consultas | SQL | Atual para estudo manual; integração pela aplicação planejada |
-| Driver PostgreSQL | psycopg | Instalado |
-| ORM | SQLAlchemy | Instalado; conexão, sessão e models iniciais configurados |
+| Banco relacional | PostgreSQL | Atual; integrado à API para organizações e filiais |
+| Consultas | SQL | Praticado via `psql`; consultas da aplicação executadas pelo ORM |
+| Driver PostgreSQL | psycopg | Atual; usado na conexão com PostgreSQL |
+| ORM | SQLAlchemy | Atual; conexão, modelos, relacionamentos e sessões usados pela API |
 | Migrações | Alembic | Configurado; primeira migration aplicada |
 | Testes | Pytest | Planejado |
 | Containers | Docker | Planejado |
@@ -92,24 +95,36 @@ Diretrizes atuais:
 - HTTP/JSON;
 - estilo REST quando adequado;
 - FastAPI como camada de entrada;
-- Pydantic para validação de entrada/saída;
+- Pydantic para validação de entrada; as respostas de organizações e filiais são montadas explicitamente como dicionários e listas, sem schemas Pydantic de saída;
 - status HTTP semânticos;
 - documentação via OpenAPI/Swagger.
 
-Exemplos já praticados:
+Rotas didáticas de clientes em memória e verificação da aplicação:
 
 ```text
+GET  /
 GET  /health
 GET  /customers
-GET  /customers/{customer_id}
+GET  /customers/{cliente_id}
 POST /customers
+PATCH /customers/{cliente_id}
+DELETE /customers/{cliente_id}
 ```
 
-Rotas educacionais atuais podem mudar quando o modelo persistente real for criado.
+Rotas com persistência no PostgreSQL:
+
+```text
+GET  /organizacoes
+POST /organizacoes/
+GET  /filiais
+POST /filiais
+```
+
+As rotas de clientes continuam como exercício em memória; o módulo persistente de clientes será construído em etapa posterior.
 
 ## 6. Persistência
 
-### Agora
+### Clientes em memória
 
 Clientes são guardados em uma lista Python apenas para demonstrar memória de processo.
 
@@ -133,9 +148,9 @@ clientes
 
 Essas tabelas fizeram parte do aprendizado de SQL. Depois, o banco local foi limpo para que o Alembic passasse a controlar a criação do schema versionado.
 
-### Etapa atual
+### Organizações e filiais no PostgreSQL
 
-Conectar a API ao PostgreSQL com SQLAlchemy e Alembic.
+A API já usa SQLAlchemy para cadastrar e consultar organizações e filiais no PostgreSQL, com schema versionado pelo Alembic.
 
 As dependências da Fase 4 já foram instaladas:
 
@@ -145,7 +160,7 @@ Alembic
 psycopg
 ```
 
-Configuração inicial criada em `app/database.py`:
+Configuração de conexão e sessão em `app/database.py`:
 
 ```text
 DATABASE_URL
@@ -156,14 +171,20 @@ get_db
 
 A URL de conexão deve vir de variável de ambiente. Senhas reais não devem ser commitadas no repositório.
 
-Models iniciais criados em `app/models.py`:
+As rotas persistentes recebem uma sessão por meio de `Depends(get_db)`. A dependência cria a sessão, disponibiliza-a para a requisição e a fecha no bloco `finally`.
+
+Modelos SQLAlchemy em `app/models.py`:
 
 ```text
 Organizacao
 Filial
 ```
 
-Esses models já representam as tabelas `organizacoes` e `filiais` e possuem relacionamento Python entre organização e filiais. Eles já foram consultados manualmente via SQLAlchemy, mas ainda não são usados pelas rotas da API.
+Esses modelos representam as tabelas `organizacoes` e `filiais`, possuem relacionamento Python entre organização e filiais e são usados pelas rotas da API. `Filial.organizacao_id` é uma chave estrangeira que referencia `Organizacao.id`.
+
+No cadastro, os schemas Pydantic validam a entrada; a rota cria uma instância do modelo SQLAlchemy, adiciona-a à sessão e confirma a transação com `commit()`. O cadastro de filial consulta a organização vinculada antes da inserção e responde `404` se ela não existir.
+
+Na listagem, a consulta ORM devolve objetos dos modelos. As rotas montam listas de dicionários com os campos da resposta, que o FastAPI serializa em JSON.
 
 Alembic foi inicializado com:
 
@@ -175,6 +196,8 @@ alembic/versions/
 
 O `env.py` lê `DATABASE_URL`, usa `Base.metadata` como referência para autogeração e não armazena senha real no repositório.
 
+A leitura verifica a ausência de `DATABASE_URL` antes de tratar o texto. Ao fornecer a URL à configuração do Alembic, cada `%` é escapado como `%%`, pois o leitor de configuração interpreta esse caractere. Ao recuperar a opção, a URL original codificada é preservada para o SQLAlchemy. Esse escape não criptografa nem oculta credenciais.
+
 A primeira migration versionada é:
 
 ```text
@@ -183,7 +206,7 @@ A primeira migration versionada é:
 
 Ela cria `organizacoes` e `filiais` no `upgrade()` e remove essas tabelas no `downgrade()`.
 
-O próximo passo técnico é criar rotas da API para inserir e consultar `Organizacao` e `Filial` usando sessão real do banco.
+O progresso, as validações realizadas e o próximo passo de aprendizagem ficam em [ROADMAP.md](ROADMAP.md).
 
 A sequência pedagógica é:
 
@@ -199,13 +222,15 @@ Sempre que uma operação importante for implementada via ORM, o conceito SQL eq
 
 ## 7. Modelo multi-tenant
 
-A unidade superior do SaaS é `Organization`; uma organização possui `Branches`.
+A unidade superior do SaaS é a organização; uma organização possui filiais, representadas inicialmente pelos modelos `Organizacao` e `Filial`.
 
 Regra arquitetural obrigatória:
 
 > Dados de uma organização nunca podem vazar para outra organização.
 
 A estratégia técnica exata de isolamento ainda será definida antes da implementação do módulo multi-tenant.
+
+As rotas atuais ainda não autenticam usuários nem restringem consultas por organização. A API desta etapa é destinada ao estudo local, não ao uso como SaaS em produção.
 
 Clientes poderão ter visibilidade restrita a uma filial ou compartilhada dentro da mesma organização, conforme [SPEC.md](SPEC.md).
 
