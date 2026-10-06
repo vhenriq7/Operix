@@ -19,6 +19,8 @@ database_url = os.getenv("DATABASE_URL")
 if database_url is None:
     raise RuntimeError("DATABASE_URL environment variable is not set")
 
+database_url = database_url.replace("%", '%%')
+
 config.set_main_option("sqlalchemy.url", database_url)
 
 # Interpret the config file for Python logging.
