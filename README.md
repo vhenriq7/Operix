@@ -6,9 +6,9 @@ O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto 
 
 ## Estado atual
 
-**Fase 4 — SQLAlchemy e Alembic (em andamento).**
+**Fase 5 — Usuários, autenticação e permissões (em andamento).**
 
-As fases de fundamentos de API e SQL foram concluídas. Já foram praticados:
+As fases de fundamentos de API, SQL e integração com SQLAlchemy e Alembic foram concluídas. A etapa atual começa pela compreensão de autenticação e autorização, ainda sem implementação de segurança na API. Já foram praticados:
 
 - aplicação FastAPI executada com Uvicorn;
 - endpoints `GET`, `POST`, `PATCH` e `DELETE`;

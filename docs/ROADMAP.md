@@ -6,9 +6,11 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 ## Status geral
 
-**Fase atual:** Fase 4 — SQLAlchemy e Alembic  
-**Próxima fase:** Fase 5 — Usuários, autenticação e permissões  
-**Objetivo imediato:** consolidar a integração já implementada com PostgreSQL e explicar a diferença entre modelo de banco e schema de API antes de encerrar a Fase 4.
+**Fase atual:** Fase 5 — Usuários, autenticação e permissões
+
+**Próxima fase:** Fase 6 — Clientes
+
+**Objetivo imediato:** distinguir autenticação de autorização e compreender a identidade do usuário antes de implementar a segurança da API.
 
 Legenda:
 
@@ -179,7 +181,7 @@ Fase concluída. Próximo aprendizado: SQLAlchemy e Alembic.
 
 ---
 
-## 🟡 Fase 4 — SQLAlchemy e Alembic
+## ✅ Fase 4 — SQLAlchemy e Alembic
 
 ### Objetivo
 
@@ -221,11 +223,12 @@ Conectar FastAPI ao PostgreSQL com persistência organizada.
 - `POST /filiais` com organização inexistente retornou `404`;
 - `POST /filiais` com organização existente retornou `201`; a filial salva apareceu depois em `GET /filiais`, com `200`;
 - o Alembic preservou uma URL fictícia codificada e gerou SQL em modo offline, sem acessar o banco;
-- a ausência de `DATABASE_URL` manteve o erro esperado, e `alembic current` no banco local confirmou `81819ad65a8a (head)`.
+- a ausência de `DATABASE_URL` manteve o erro esperado, e `alembic current` no banco local confirmou `81819ad65a8a (head)`;
+- revisão conceitual concluída: o desenvolvedor distinguiu a validação de entrada antes da rota, o objeto em memória e as operações da sessão para persistir os dados.
 
 Essas verificações foram manuais ou pontuais; ainda não há uma suíte de testes automatizados no projeto.
 
-### Ainda praticar antes de encerrar
+### Checklist de conclusão
 
 - [x] configurar conexão com PostgreSQL;
 - [x] criar sessão de banco;
@@ -233,7 +236,7 @@ Essas verificações foram manuais ou pontuais; ainda não há uma suíte de tes
 - [x] iniciar Alembic;
 - [x] criar e aplicar primeira migration;
 - [x] criar e consultar organizações e filiais pela API usando persistência real;
-- [ ] explicar a diferença entre model de banco e schema de API.
+- [x] explicar a diferença entre model de banco e schema de API.
 
 ### Primeiras entidades persistentes
 
@@ -246,11 +249,11 @@ Criar e consultar organizações e filiais persistidas no PostgreSQL e reproduzi
 
 ### Próximo passo
 
-O fluxo persistente e a criação das tabelas por migração já foram validados. A fase permanece em andamento até concluir a revisão conceitual: explicar, com palavras próprias, os papéis do schema Pydantic de entrada, do modelo SQLAlchemy e da sessão no cadastro de uma entidade. Depois dessa revisão, conferir o encerramento da Fase 4 antes de iniciar autenticação e permissões.
+Fase concluída após validar o fluxo persistente, a criação das tabelas por migração e a revisão conceitual. Próximo aprendizado: usuários, autenticação e permissões.
 
 ---
 
-## ⬜ Fase 5 — Usuários, autenticação e permissões
+## 🟡 Fase 5 — Usuários, autenticação e permissões
 
 ### Objetivo
 
@@ -264,6 +267,10 @@ Construir a base de segurança do SaaS multi-tenant.
 - tokens/sessões conforme decisão futura;
 - RBAC;
 - isolamento por organização e filial.
+
+### Próximo passo
+
+Explicar a diferença entre autenticação e autorização em um exemplo simples. Depois, revisar os requisitos de usuários e permissões na SPEC antes de definir o modelo de usuário e as decisões técnicas de segurança. Nenhuma implementação de autenticação ou autorização foi concluída nesta etapa.
 
 ### Critério de conclusão
 
