@@ -1,7 +1,7 @@
 # Operix — Arquitetura
 
 **Status:** documento vivo  
-**Última atualização:** 2026-10-06
+**Última atualização:** 2026-10-07
 
 Este documento registra decisões técnicas. Requisitos de negócio pertencem a [SPEC.md](SPEC.md); progresso pertence a [ROADMAP.md](ROADMAP.md).
 
@@ -224,11 +224,13 @@ Sempre que uma operação importante for implementada via ORM, o conceito SQL eq
 
 A unidade superior do SaaS é a organização; uma organização possui filiais, representadas inicialmente pelos modelos `Organizacao` e `Filial`.
 
+O foco inicial de implementação está definido na SPEC. Tecnicamente, serão preservados os modelos de organização e filial e seus vínculos por chave estrangeira, mesmo durante o desenvolvimento dos fluxos de uma única empresa. O vínculo de organização deve continuar explícito na modelagem, sem depender de um identificador fixo no código.
+
 Regra arquitetural obrigatória:
 
 > Dados de uma organização nunca podem vazar para outra organização.
 
-A estratégia técnica exata de isolamento ainda será definida antes da implementação do módulo multi-tenant.
+A estratégia técnica exata de isolamento será definida antes da ampliação para múltiplas organizações. O contexto da organização deverá fazer parte das verificações de acesso nessa ampliação; login e permissões entre filiais, sozinhos, não comprovam isolamento entre empresas.
 
 As rotas atuais ainda não autenticam usuários nem restringem consultas por organização. A API desta etapa é destinada ao estudo local, não ao uso como SaaS em produção.
 
@@ -257,6 +259,8 @@ A estratégia exata de tipo monetário será definida antes do módulo financeir
 ## 10. Testes
 
 Testes serão introduzidos progressivamente.
+
+No foco inicial, validar autenticação e permissões entre as filiais da organização em desenvolvimento. A validação de isolamento entre organizações será obrigatória antes de disponibilizar acesso a outras empresas, conforme a etapa de ampliação no roadmap.
 
 Prioridade de cobertura:
 

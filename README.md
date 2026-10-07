@@ -8,7 +8,9 @@ O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto 
 
 **Fase 5 — Usuários, autenticação e permissões (em andamento).**
 
-As fases de fundamentos de API, SQL e integração com SQLAlchemy e Alembic foram concluídas. A etapa atual começa pela compreensão de autenticação e autorização, ainda sem implementação de segurança na API. Já foram praticados:
+O foco inicial é desenvolver e validar os fluxos de uma empresa com várias filiais. A ampliação para outras empresas permanece planejada, conforme [docs/SPEC.md](docs/SPEC.md).
+
+As fases de fundamentos de API, SQL e integração com SQLAlchemy e Alembic foram concluídas. A etapa atual prepara as contas de usuário, o login e as permissões entre filiais, ainda sem implementação de segurança na API. Já foram praticados:
 
 - aplicação FastAPI executada com Uvicorn;
 - endpoints `GET`, `POST`, `PATCH` e `DELETE`;

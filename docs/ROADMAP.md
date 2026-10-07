@@ -10,7 +10,7 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 **Próxima fase:** Fase 6 — Clientes
 
-**Objetivo imediato:** definir o escopo de unicidade do e-mail de login e preparar a modelagem das contas de usuário, sem antecipar a implementação da segurança da API.
+**Objetivo imediato:** levantar os dados necessários para as contas de usuário da organização em foco e estudar o armazenamento seguro de senhas antes de implementar o modelo.
 
 Legenda:
 
@@ -35,6 +35,10 @@ organização/filiais
 ```
 
 O escopo poderá ser reduzido se necessário para manter qualidade e aprendizagem. "MVP" não significa implementar todos os recursos futuros descritos na SPEC.
+
+### Estratégia de implementação
+
+Por decisão do desenvolvedor, os fluxos serão construídos e validados primeiro em uma empresa com várias filiais. A ampliação para múltiplas organizações será planejada após estabilizar esses fluxos, para manter o aprendizado incremental. As fases existentes continuam na mesma ordem; a validação de segurança para oferecer acesso a outras empresas fica na etapa futura de ampliação descrita ao final deste roadmap.
 
 ---
 
@@ -257,7 +261,7 @@ Fase concluída após validar o fluxo persistente, a criação das tabelas por m
 
 ### Objetivo
 
-Construir a base de segurança do SaaS multi-tenant.
+Construir a base de segurança para a organização em foco e suas filiais.
 
 ### Aprender
 
@@ -266,7 +270,8 @@ Construir a base de segurança do SaaS multi-tenant.
 - identidade do usuário;
 - tokens/sessões conforme decisão futura;
 - RBAC;
-- isolamento por organização e filial.
+- vínculo da conta com a organização;
+- permissões e isolamento de acesso entre filiais.
 
 ### Já praticado
 
@@ -274,14 +279,15 @@ Construir a base de segurança do SaaS multi-tenant.
 - [x] introdução à unicidade de valores no banco com `UNIQUE`;
 - [x] distinção entre organização e filial ao definir o alcance de acesso;
 - [x] decisões iniciais sobre identificação e alcance das contas registradas na SPEC.
+- [x] foco inicial em uma organização com várias filiais definido antes da ampliação para outras empresas.
 
 ### Próximo passo
 
-Decidir o escopo de unicidade do e-mail entre organizações. Depois, levantar os dados necessários para as contas e estudar o armazenamento seguro de senhas antes de implementar o modelo de usuário. As regras de negócio e questões pendentes ficam na SPEC. Nenhuma implementação de autenticação ou autorização foi concluída nesta etapa.
+Levantar os dados necessários para as contas da organização em foco e estudar o armazenamento seguro de senhas antes de implementar o modelo de usuário. A questão do mesmo e-mail em organizações diferentes fica para a ampliação futura. As regras de negócio e questões pendentes ficam na SPEC. Nenhuma implementação de autenticação ou autorização foi concluída nesta etapa.
 
 ### Critério de conclusão
 
-Usuários autenticados só acessam dados autorizados de sua organização/filial.
+Na organização em foco, usuários autenticados só acessam as filiais e executam as ações autorizadas para suas contas. Esse critério não comprova que o sistema está pronto para atender várias organizações.
 
 ---
 
@@ -497,6 +503,18 @@ Executar o Operix de maneira reproduzível fora do ambiente local.
 - deploy.
 
 ---
+
+## Ampliação futura — múltiplas organizações
+
+Etapa ainda não iniciada, a planejar quando os fluxos principais da primeira versão estiverem estáveis.
+
+Antes de disponibilizar acesso a outras empresas:
+
+- resolver as regras pendentes de contas e login entre organizações na SPEC;
+- definir e registrar a estratégia técnica de isolamento na arquitetura;
+- testar que uma conta não consegue ler ou alterar dados de outra organização, inclusive ao informar identificadores de registros dessa organização.
+
+Essa validação é requisito para a oferta multi-organização; concluir os fluxos de uma empresa não encerra essa etapa automaticamente.
 
 ## Regra de atualização
 

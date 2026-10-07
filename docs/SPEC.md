@@ -63,9 +63,15 @@ O foco é a operação comercial, conta do cliente, estoque e logística.
 - conciliação bancária;
 - fluxo de caixa empresarial completo.
 
+### Foco da primeira versão
+
+A primeira versão será desenvolvida e validada para uma única organização com várias filiais. O objetivo é estabilizar os fluxos operacionais dessa empresa antes de ampliar o uso para outras organizações.
+
+A oferta como SaaS para múltiplas organizações continua prevista para uma etapa posterior. Essa ampliação depende da definição das regras pendentes e da validação de isolamento dos dados antes de disponibilizar acesso a outras empresas.
+
 ## 3. Organização e filiais
 
-O SaaS suporta múltiplas organizações.
+Atender múltiplas organizações é um requisito futuro do SaaS, não uma capacidade já validada da primeira versão.
 
 Uma organização pode possuir várias filiais.
 
@@ -102,6 +108,7 @@ As permissões exatas serão refinadas conforme os módulos forem implementados.
 Regras definidas para o módulo de usuários, ainda não implementado:
 
 - o identificador de login será o e-mail;
+- na organização em foco, o mesmo e-mail não poderá identificar contas diferentes;
 - cada conta ficará vinculada a uma única organização;
 - dono e financeiro terão acesso a todas as filiais da própria organização;
 - vendedor e caixa terão acesso somente à filial à qual estiverem vinculados, dentro da própria organização;
@@ -109,7 +116,7 @@ Regras definidas para o módulo de usuários, ainda não implementado:
 
 O alcance de acesso define quais filiais podem ser acessadas, não quais ações podem ser executadas. Acesso a todas as filiais não significa permissão irrestrita para todas as operações.
 
-As decisões pendentes sobre unicidade do e-mail e representação da função Dono estão na seção de questões de negócio ainda abertas.
+O uso do mesmo e-mail em organizações diferentes será decidido na etapa de ampliação. Essa questão e a representação da função Dono permanecem na seção de questões de negócio ainda abertas.
 
 ### Administrador
 
@@ -556,7 +563,7 @@ Os indicadores exatos serão priorizados quando o módulo for iniciado.
 
 Antes dos módulos correspondentes, decidir explicitamente:
 
-- se o e-mail de login será único em todo o Operix ou apenas dentro de cada organização;
+- na ampliação para múltiplas organizações, se o e-mail de login será único em todo o Operix ou apenas dentro de cada organização;
 - se a função Dono será representada pelo papel Administrador ou por um papel próprio;
 - momento exato da movimentação de estoque em transferências;
 - quem pode cancelar pedido e quais efeitos isso gera;
