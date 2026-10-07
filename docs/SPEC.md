@@ -84,9 +84,11 @@ Dados de uma organização nunca devem ser visíveis para outra organização.
 
 ## 4. Papéis de usuário
 
-Papéis iniciais:
+Papéis e funções considerados inicialmente:
 
+- Dono;
 - Administrador;
+- Financeiro;
 - Gerente;
 - Vendedor;
 - Caixa;
@@ -94,6 +96,20 @@ Papéis iniciais:
 - Conferente.
 
 As permissões exatas serão refinadas conforme os módulos forem implementados.
+
+### Contas e alcance de acesso
+
+Regras definidas para o módulo de usuários, ainda não implementado:
+
+- o identificador de login será o e-mail;
+- cada conta ficará vinculada a uma única organização;
+- dono e financeiro terão acesso a todas as filiais da própria organização;
+- vendedor e caixa terão acesso somente à filial à qual estiverem vinculados, dentro da própria organização;
+- o acesso às filiais não concede acesso a organizações diferentes.
+
+O alcance de acesso define quais filiais podem ser acessadas, não quais ações podem ser executadas. Acesso a todas as filiais não significa permissão irrestrita para todas as operações.
+
+As decisões pendentes sobre unicidade do e-mail e representação da função Dono estão na seção de questões de negócio ainda abertas.
 
 ### Administrador
 
@@ -540,6 +556,8 @@ Os indicadores exatos serão priorizados quando o módulo for iniciado.
 
 Antes dos módulos correspondentes, decidir explicitamente:
 
+- se o e-mail de login será único em todo o Operix ou apenas dentro de cada organização;
+- se a função Dono será representada pelo papel Administrador ou por um papel próprio;
 - momento exato da movimentação de estoque em transferências;
 - quem pode cancelar pedido e quais efeitos isso gera;
 - se crédito expira;

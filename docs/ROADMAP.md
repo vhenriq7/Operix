@@ -10,7 +10,7 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 **Próxima fase:** Fase 6 — Clientes
 
-**Objetivo imediato:** distinguir autenticação de autorização e compreender a identidade do usuário antes de implementar a segurança da API.
+**Objetivo imediato:** definir o escopo de unicidade do e-mail de login e preparar a modelagem das contas de usuário, sem antecipar a implementação da segurança da API.
 
 Legenda:
 
@@ -268,9 +268,16 @@ Construir a base de segurança do SaaS multi-tenant.
 - RBAC;
 - isolamento por organização e filial.
 
+### Já praticado
+
+- [x] distinção conceitual entre autenticação e autorização;
+- [x] introdução à unicidade de valores no banco com `UNIQUE`;
+- [x] distinção entre organização e filial ao definir o alcance de acesso;
+- [x] decisões iniciais sobre identificação e alcance das contas registradas na SPEC.
+
 ### Próximo passo
 
-Explicar a diferença entre autenticação e autorização em um exemplo simples. Depois, revisar os requisitos de usuários e permissões na SPEC antes de definir o modelo de usuário e as decisões técnicas de segurança. Nenhuma implementação de autenticação ou autorização foi concluída nesta etapa.
+Decidir o escopo de unicidade do e-mail entre organizações. Depois, levantar os dados necessários para as contas e estudar o armazenamento seguro de senhas antes de implementar o modelo de usuário. As regras de negócio e questões pendentes ficam na SPEC. Nenhuma implementação de autenticação ou autorização foi concluída nesta etapa.
 
 ### Critério de conclusão
 
