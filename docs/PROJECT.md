@@ -1,20 +1,26 @@
-# Operix — Especificação do produto
+# Operix — Projeto
+
+**Situação:** em desenvolvimento, com demonstração planejada utilizando dados sintéticos. O sistema não está homologado nem disponível para produção.
+
+Referência central de engenharia do Operix. Reúne requisitos, arquitetura, stack, marcos de entrega e decisões pendentes. O `README.md` apresenta o repositório; o `AGENTS.md` define as instruções para agentes de IA.
+
+## 1. Requisitos de produto
 
 **Estado:** requisitos em validação. As funcionalidades descritas não estão necessariamente implementadas; consultar o README e o roadmap.
 **Primeiro destinatário:** uma empresa de três filiais, controladas por uma administração central. Uma filial pode ser a matriz; não criar uma quarta unidade artificial.
 **Fase atual:** construção de demonstração funcional com dados sintéticos, em repositório público.
 **Entrada em produção:** condicionada a aprovação empresarial, homologação e planejamento operacional.
 
-Este documento centraliza os requisitos de produto, regras funcionais e pendências; a arquitetura técnica está em [ARCHITECTURE.md](ARCHITECTURE.md) e a sequência de implementação está em [ROADMAP.md](ROADMAP.md).
+Esta seção centraliza requisitos de produto, regras funcionais e pendências. A arquitetura e as entregas estão nas seções seguintes.
 
-## 1. Identidade, filiais e equipe
+### 1. Identidade, filiais e equipe
 - Administrador principal cadastra/gerencia filiais, usuários, funções e permissões de ação.
 - Usuário vinculado à organização e a uma ou mais filiais conforme função. Dono e financeiro podem consultar consolidação das três filiais quando autorizados.
 - Perfis de referência: dono, administrador, financeiro, gerente, vendedor, caixa, estoque, conferente e logística. Permissões específicas são configuráveis e devem ser validadas no servidor.
 - Abrir, movimentar e fechar caixa registra o usuário real em cada evento; **uma pessoa pode abrir e outra fechar**.
 - Configurações comuns, como modelos de parcelamento de boletos, ficam disponíveis para todas as filiais da mesma organização.
 
-## 2. Cliente PF/PJ e ficha completa
+### 2. Cliente PF/PJ e ficha completa
 - Tipo PF ou PJ; CPF ou CNPJ inicialmente obrigatórios conforme tipo; nome/razão social, nome fantasia se PJ e pessoa de contato quando houver.
 - Código de cadastro, e-mail, múltiplos telefones com etiquetas (WhatsApp, celular, comercial, residencial), principal e observações.
 - País, CEP, UF, cidade, bairro, logradouro, número, complemento e referência. Endereços de cobrança e entrega podem ser diferentes. Consulta automática do CEP é opcional e editável.
@@ -22,13 +28,13 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Abas/histórico de orçamentos, pedidos, pagamentos, créditos, estornos, entregas, cobranças e transações, filtráveis por data e filial respeitando regras de compartilhamento.
 - Confirmar posteriormente política de duplicidade, privacidade, CPF/CNPJ e dados mínimos quando o cliente não tem documento.
 
-## 3. Cadastro de produtos e estoque
+### 3. Cadastro de produtos e estoque
 - Produto central: código interno único, nome, descrição, categoria, marca, unidade (unidade, kg etc.), código de barras quando houver, peso líquido, peso bruto, custo de referência e dados tributários pertinentes.
 - Por filial: preço de venda, estoque, estoque mínimo e histórico de entradas, saídas, transferências, ajustes, devoluções e reservas.
 - A mesma mercadoria pode ter **preços e saldos distintos por filial** sem duplicar o cadastro geral.
 - Não atribuir ao produto a situação de pagamento/entrega de uma venda: esses são dados do pedido.
 
-## 4. Orçamento, negociação e pedido em aberto
+### 4. Orçamento, negociação e pedido em aberto
 - Vendedor escolhe cliente e produtos, edita quantidade, unidade, preço unitário e observação de cada linha; desconto por item em reais ou percentual; desconto geral sobre o pedido.
 - Preservar preço de tabela, preço efetivamente negociado, descontos por item e desconto geral, além de quem alterou e quando. Definir base da porcentagem efetiva para impedir que reduzir preço manualmente esconda um desconto.
 - Limiar de **alerta** configurável por administração (16% é exemplo). Ao ultrapassar, exibir aviso, permitir clicar OK e salvar, registrar ocorrência e notificar gestor pelo próprio sistema. Não impor bloqueio ou senha: a regra discutida é alerta sem impedir orçamento.
@@ -36,7 +42,7 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Definir por item/quantidade retirada imediata, entrega, retirada posterior ou parte para depois.
 - **Imprimir após conversão:** documento com código/número, data, cliente, telefone, endereço de entrega, itens/códigos/unidades/quantidades/valores unitários/totais, descontos, forma e estado de pagamento, instruções, observações e campo para assinatura do cliente. A impressão pode ir para a mesa do montador de carga, sem liquidar nem entregar o pedido.
 
-## 5. Pedido, valores recebidos e crédito do cliente
+### 5. Pedido, valores recebidos e crédito do cliente
 - O mesmo pedido pode ser recebido parcialmente, por **vários meios** (ex.: R$ 300 Pix + R$ 200 cartão + R$ 500 fiado), mantendo saldos por obrigação e evento de recebimento.
 - Meios previstos: dinheiro, cartão crédito, cartão débito, Pix QR, Pix comprovante sujeito a conferência, cheque, boleto, crédito livre aplicado explicitamente e outros configuráveis.
 - **Três grandezas independentes:** valor vendido, dinheiro efetivamente recebido e situação logística/entrega. Uma venda paga pode permanecer sem entrega e uma entrega concluída pode continuar fiada.
@@ -45,13 +51,13 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Exemplo obrigatório para testes: cliente com R$ 2.000 de crédito livre, R$ 500 já pagos em pedido separado e R$ 90 de nova dívida; nenhuma compensação automática.
 - Registrar trilha de toda aplicação, estorno e repasse para outra obrigação. Crédito aplicado não vira nova entrada física no caixa.
 
-## 6. Cancelamentos, devoluções e ajustes
+### 6. Cancelamentos, devoluções e ajustes
 - Cancelamento total ou **parcial por item/quantidade**: se seis unidades foram entregues e quatro canceladas, conservar seis e cancelar somente quatro.
 - Para parcela elegível à devolução financeira, o cliente pode optar por reembolso via Pix/dinheiro/cartão conforme meios permitidos, ou conversão em crédito livre futuro.
 - Diferenciar cancelamento do pedido, estorno do recebimento, devolução de mercadoria e operação fiscal. Preservar histórico, autorização e efeito no estoque.
 - Se pedido já foi parcialmente entregue, não fingir que houve retorno automático de estoque; seguir processo de devolução.
 
-## 7. Caixa operacional
+### 7. Caixa operacional
 - Abertura por funcionário e filial, com **valor inicial em dinheiro** e histórico da sessão.
 - Tela de valores por meio: dinheiro, cartão crédito/débito, cheque (quantidade e valor), Pix QR, Pix comprovante, boleto, outros. Separar lançado, confirmado e a compensar quando aplicável.
 - Consultas por hoje, ontem, 7 dias, intervalo, funcionário, filial e pedido; possibilidade de consultar/reabrir caixas anteriores com autorização e trilha de auditoria.
@@ -60,34 +66,34 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Fechamento por pessoa que pode ser diferente de quem abriu, incluindo horário, conferência por modalidade, sobra/falta e responsável.
 - **Caixa da loja não é conta bancária da empresa.** Operações do financeiro não devem manipular automaticamente o saldo físico da loja.
 
-## 8. Fiados e cobrança recorrente
+### 8. Fiados e cobrança recorrente
 - Fiado exige **vencimento original obrigatório** no pedido/obrigação. Relatório diário imprimível com código do cliente, nome, telefone, pedido, valor, vencimento; listar apenas quando vencer ou já estiver vencido.
 - Atendimento de cobrança: quem ligou, data, resultado, observação e **próxima data de cobrança** agendada.
 - Caso WP: vencimento original 23/10, contato em 23/10, nova cobrança combinada para 28/10. A dívida permanece **vencida desde 23/10**; sai apenas da fila de contatos até 28/10.
 - Relatórios separados de inadimplência e produtividade da cobrança; promessa de pagamento não é recebimento.
 
-## 9. Boleto e parcelamento
+### 9. Boleto e parcelamento
 - O operador autorizado cria modelos de vencimento **livres e reutilizáveis** para toda a organização: por exemplo, 15/30, 30/60, 15/30/45/60, 15/40/65; não limitar a lista a presets fixos.
 - Seleção calcula vencimentos a partir de data-base configurada, número de parcelas e valores, ajustando centavos na última parcela para a soma fechar.
 - Permitir mudar vencimentos em um pedido sem reescrever o modelo global, conforme permissões.
 - Imprimir boleto associado ao pedido/entrega quando já houver boleto **real emitido**. Gerar apenas cronograma não equivale a emissão bancária.
 - Controlar vencido, a vencer, emitido, compensado, cancelado e falhas. Emissão bancária exige provedor/conta autorizada, regras de dias úteis, homologação e confirmação confiável antes de baixa.
 
-## 10. Cheques e custódia
+### 10. Cheques e custódia
 - Registrar cliente/código, pedido, filial, banco, número do cheque, favorecido, valor, data de emissão declarada, data de recebimento, data prevista de depósito/pré-datado, depósito efetivo, compensação, conta bancária destino, funcionário lançador, observações e ocorrências.
 - Acompanhar em carteira, a depositar, depositado, compensado, devolvido, **repassado a terceiros**; quem está com cheque, data de cada evento e dias faltantes.
 - Relatório de cheques para depositar hoje/próximos dias, vencidos, repassados, depositados, devolvidos e compensados, por filial e consolidado.
 - Cheque repassado a fornecedor mantém elo com o contas a pagar; repassar cheque e compensá-lo não são a mesma coisa.
 - Cheque ainda em carteira ou não compensado não pode ser tratado como dinheiro bancário disponível sem critério.
 
-## 11. Financeiro central e contas a pagar
+### 11. Financeiro central e contas a pagar
 - Cadastrar conta de fornecedor: fornecedor, documento, descrição, categoria, filial responsável, valor, vencimento, parcelas, valor pago, data de pagamento e saldo.
 - Previsão do que vence hoje, na semana e no mês, e valores atrasados; relatórios por filial e consolidados.
 - Pagamento não precisa passar pelo **caixa físico**: selecionar **conta bancária cadastrada** da empresa, forma Pix/transferência etc. ou **cheque de terceiro recebido anteriormente**, ou combinar fontes.
 - A conta bancária que pagou pode ser central, embora a despesa seja de uma filial. Separar conta pagadora, obrigação e comprovante.
 - Projeção de fluxo de caixa diferencia entradas/saídas esperadas e disponibilidades já confirmadas. Não considerar programado = pago.
 
-## 12. Cargas, frota e entrega parcial
+### 12. Cargas, frota e entrega parcial
 - Cadastrar frota, caminhões/veículos, motorista e ajudantes, com filial responsável e gestão central conforme autorização.
 - Montador cria carga do dia identificada como "Carga 1", "Carga 2" etc., escolhe caminhão, motorista, ajudantes e pedidos por código ou nome; visualiza valor total de pedidos da carga.
 - Selecionar **quais produtos e quais quantidades** vão embarcar; o que cliente retirou ou solicitou para depois não entra na carga atual.
@@ -96,21 +102,21 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Mercadoria não entregue pode voltar ao depósito **ou permanecer no caminhão**. Preservar onde ela está; não duplicar quantidades em cargas/estoques.
 - Uma compra pode estar em várias cargas e uma carga pode conter várias compras; controle é por item/quantidade, não apenas por pedido.
 
-## 13. Recebimentos com motorista
+### 13. Recebimentos com motorista
 - Motorista pode cobrar na entrega, mas deve **entregar integralmente ao caixa** o dinheiro recebido, sem usar parte para combustível/despesas.
 - Caixa confere **pedido por pedido** o que cliente pagou, o que motorista informou e o que entregou efetivamente.
 - O dinheiro em poder do motorista não entra automaticamente no caixa até a prestação de contas.
 - Se cliente pagou menos, o restante é dívida do cliente. Se cliente pagou tudo mas motorista devolveu menos, a diferença é de **prestação de contas**, não inadimplência do cliente.
 - Lançar somente o valor efetivamente recebido/confirmado, preservando a divergência para a administração resolver pessoalmente.
 
-## 14. BI, gerência e documentos
+### 14. BI, gerência e documentos
 - Painel da patroa/patrão: todas as três filiais juntas ou uma por vez, conforme permissão e período.
 - Valores de vendas, recebidos, caixa físico, fiado a vencer/vencido, créditos livres, adiantamentos vinculados, boleto, cheques e contas a pagar **em blocos separados**.
 - Relatório por **cada carga**: dia, número da carga, caminhão, motorista, ajudantes, pedidos, quais foram entregues/parciais/não entregues, motivo, pendências, situação financeira e montante recebido pelo motorista.
 - Resumo diário de cargas e relatórios de cobrança, conta do cliente e cheques, com impressão.
 - Evitar somar faturamento, previsão de cobrança e recebimento real como se fossem a mesma métrica.
 
-## 15. Questões pendentes — não supor respostas
+### 15. Questões pendentes — não supor respostas
 - Quem pode cancelar/estornar, editar dados, reabrir caixa, aprovar divergências e repassar cheques?
 - Regras de duplicidade de CPF/CNPJ, acesso a dados pessoais e compartilhamento de clientes entre filiais.
 - Fórmula exata para alerta de desconto efetivo; preço de custo versus preço negociado.
@@ -122,29 +128,114 @@ Este documento centraliza os requisitos de produto, regras funcionais e pendênc
 - Antes do piloto real: direitos de uso, contrato, preço, suporte, disponibilidade, backups, migração, LGPD e segurança.
 
 
-## Regras complementares consolidadas
+### Regras complementares consolidadas
 
-### Filiais e conta do cliente
+#### Filiais e conta do cliente
 
 - A organização tem três filiais, com administração central. A matriz não representa uma quarta loja.
 - O cliente pertence à organização e possui filial de origem; seu cadastro pode ser compartilhado ou restrito. Se não compartilhado, outras filiais não consultam sua conta comercial, histórico, créditos ou débitos. Se compartilhado, somente filiais e usuários autorizados podem consultá-los ou realizar operações.
 - O identificador de login planejado é e-mail; uma conta pertence a uma organização. O mesmo e-mail não identifica usuários distintos dentro dessa organização. Regra de repetição entre organizações e papel próprio de Dono seguem pendentes.
 - Administração e financeiro podem ter visão consolidada; vendedor e caixa se limitam às filiais atribuídas. Alcance de filial não equivale a permissão para executar toda operação.
 
-### Crédito e comissão
+#### Crédito e comissão
 
 - Cada obrigação do cliente é vinculada a pedido e valor. Crédito livre não quita débito automaticamente; a aplicação exige evento explícito e rastreável.
 - Compra a prazo pode observar limite por cliente; a decisão sobre bloqueio ou aprovação ao exceder o limite permanece aberta.
 - Comissão de venda mantém vínculo com vendedor e filial comercial, mesmo quando outra filial atende o pedido. Comissão prevista e adquirida são distintas; a comissão adquirida pressupõe pedido pago. Fórmula final e arredondamento dependem de validação.
 
-### Transferências e estoques
+#### Transferências e estoques
 
 - Uma transferência entre filiais tem fluxo inicialmente previsto `SOLICITADA → APROVADA → RECEBIDA`; ainda precisa definir quando o estoque sai da origem e entra no destino.
 - Estoque por filial deve ser rastreável por movimentações e nunca aumentar em retorno de mercadoria antes de registrar a localização física real.
 
-### Volume de referência
+#### Volume de referência
 
 Operação inicial de referência: cerca de 200 pedidos diários, em canais presenciais, telefone e WhatsApp. É parâmetro para descoberta e testes futuros, não meta de desempenho já comprovada.
 
 
 **Decisões abertas não devem ser implementadas como suposições.**
+
+## 2. Arquitetura e tecnologias
+
+**Estado:** arquitetura evolutiva; informações implementadas e planejadas são diferenciadas.
+
+### Estratégia
+
+**Monólito modular** com API HTTP/JSON e PostgreSQL. Os limites internos evoluirão pelos domínios do produto, sem microserviços ou camadas artificiais no estágio atual. A separação arquitetural deve preservar transações consistentes entre pedidos, pagamentos, estoque e expedição.
+
+### Stack e maturidade
+
+| Área | Tecnologia | Estado |
+| --- | --- | --- |
+| Linguagem e API | Python, FastAPI, Uvicorn | Implementados |
+| Validação e contrato HTTP | Pydantic, OpenAPI | Implementados |
+| Banco de dados | PostgreSQL | Integrado parcialmente |
+| Persistência | SQLAlchemy, psycopg | Em uso em organizações/filiais |
+| Migrações | Alembic | Configurado, migração inicial versionada |
+| Versionamento | Git e GitHub | Em uso |
+| Testes automatizados | Pytest (previsto) | Não implementado |
+| Contêineres | Docker (previsto) | Não implementado |
+| Interface operacional | Stack a definir | Não implementada |
+| Deploy e observabilidade | Infraestrutura a definir | Não implementados |
+
+Dependências existentes são especificadas em `requirements.txt`. Novas tecnologias só devem ser adotadas mediante necessidade e revisão da decisão.
+
+### Componentes existentes
+
+- `app/main.py`: API inicial com saúde, clientes, organizações e filiais.
+- `app/database.py`: conexão e sessões SQLAlchemy via `DATABASE_URL`.
+- `app/models.py`: entidades `Organizacao` e `Filial`, com relacionamento.
+- `alembic/`: controle versionado da estrutura de banco.
+- `app/main.py` ainda utiliza **lista em memória para clientes**; apenas organizações e filiais usam persistência no PostgreSQL.
+
+**Ainda inexistentes:** autenticação, RBAC, isolamento efetivo entre organizações, persistência real de clientes, testes automatizados, módulos transacionais completos, interface de negócio, integrações bancárias e implantação.
+
+### Domínios previstos
+
+Identidade e filiais; clientes; produtos e estoque; comercial (orçamentos/pedidos); conta do cliente e recebimentos; caixa; cobranças; logística/cargas; financeiro central; relatórios. A estrutura física de pastas será adaptada conforme funcionalidades forem implementadas.
+
+### Regras técnicas transversais
+
+- **Autorização:** identidade autenticada e escopo por organização/filial em cada consulta e comando; o front-end não substitui controles de API. Testar acessos cruzados antes de disponibilizar dados reais.
+- **Integridade:** operações financeiras e de estoque devem manter transações, vínculos e histórico; definir representação exata para valores monetários (Decimal/NUMERIC ou centavos inteiros) antes do módulo financeiro; evitar `float`.
+- **Idempotência:** impedir cobrança, recebimento, reserva ou baixa duplicados por requisições repetidas ou concorrentes.
+- **Auditoria:** identificar usuário, data, contexto e motivo de eventos relevantes; estornos e correções não apagam o histórico operacional.
+- **Fronteiras de domínio:** venda não equivale a recebimento; recebimento não equivale a entrega; dinheiro com motorista não é dinheiro conferido no caixa; cheque recebido não é compensado; parcela prevista não é boleto bancário registrado.
+- **Estoque/logística:** quantidades são controladas por item e localização, incluindo retirada, caminhão, retorno e entregas parciais. Um pedido pode estar em múltiplas cargas.
+- **Qualidade:** testes unitários, integração e autorização devem acompanhar os módulos críticos; automação CI pode ser introduzida com a suíte de testes, sem alegar que já existe.
+
+### Ambientes e entrada em produção
+
+Etapa atual: desenvolvimento local e demonstração com dados sintéticos. Produção exige aprovação formal, revisão de segurança e LGPD, integração bancária homologada, testes de carga e concorrência, backup e restauração, monitoramento, plano de rollback e suporte. Nenhum desses controles é considerado concluído por estar documentado.
+
+## 3. Entregas e critérios de aceite
+
+**Situação atual:** API inicial com persistência de organizações e filiais entregue; autenticação e os fluxos completos do ERP ainda não implementados. O roadmap registra marcos de produto, não aulas ou exercícios. Datas serão definidas apenas após estimativa.
+
+### Marcos
+
+| Marco | Entrega | Critério de aceite | Situação |
+| --- | --- | --- | --- |
+| D0 — requisitos | Consolidar regras, cenários e decisões pendentes | Especificação revisada e fluxos críticos validados com o responsável | Em levantamento |
+| D1 — identidade | Contas, login, RBAC e permissão por filial | Usuário não acessa recursos não autorizados; administradores consultam somente escopo permitido | Não iniciado |
+| D2 — cadastros | Clientes, produtos, categoria, preços e estoque por filial | CRUD persistente, cadastro central e saldo por filial com testes | Não iniciado |
+| D3 — comercial | Orçamentos, descontos, pedidos abertos e impressão | Fluxo orçamento → pedido sem gerar pagamento ou entrega fictícios | Não iniciado |
+| D4 — caixa | Abertura, sangria, suprimento, fechamento, pagamentos mistos, crédito e fiado | Pagamentos parciais são conciliados; crédito e débito não se compensam automaticamente; auditoria dos operadores | Não iniciado |
+| D5 — cobrança | Vencimentos, contatos, contas de cliente, relatórios e painéis | Vencimento original é preservado; próxima cobrança é independente; consolidação por filial | Não iniciado |
+| D6 — logística | Frota, romaneio, montagem de carga, entrega parcial, pendências e prestação de contas | Baixa por pedido; retorno sem data obrigatória; dinheiro do motorista só entra no caixa após conferência | Não iniciado |
+| D7 — financeiro ampliado | Boletos integrados, condições configuráveis, cheques, bancos e contas a pagar | Parcelamento fecha nos centavos; cheque repassado vincula obrigação; banco e caixa não se confundem | Não iniciado |
+| D8 — validação | Testes de ponta a ponta, dados sintéticos, relatório gerencial e demonstração | Jornada comercial-financeira-logística reproduzível, números conciliados, documentação fiel ao comportamento | Não iniciado |
+
+Os marcos D1–D5 compõem a primeira demonstração funcional; D6–D8 ampliam os fluxos. O detalhamento e decisões em aberto estão na seção de requisitos deste documento. Não anunciar como implementada qualquer linha ainda pendente.
+
+### Gates de implantação
+
+- **G1 — decisão comercial:** apresentar demonstração; obter aprovação explícita, definição de escopo, responsabilidades e condições de uso.
+- **G2 — homologação:** revisar segurança, segregação de acessos, migração autorizada, testes financeiros/logísticos, operação com dados reais, integrações, backup/restauração, observabilidade e suporte.
+- **G3 — produção:** implantar de forma controlada após G1 e G2, com rollback e acompanhamento; o repositório público de demonstração não se converte automaticamente em ambiente de produção.
+
+### Regras de entrega
+
+Cada mudança deve ter escopo rastreável, critério de aceite, implementação, verificação (automatizada quando disponível), revisão por PR e atualização pontual da documentação afetada. O status depende de evidência testável, não da existência de um arquivo ou interface.
+
+**Próxima prioridade:** concluir decisões abertas de D0 relevantes a usuários e permissões, depois iniciar D1 preservando a API existente.

@@ -8,10 +8,8 @@ O Operix integra os processos de cadastros, vendas, pedidos, estoque, contas de 
 
 ## Documentação
 
-- [Especificação do produto](docs/SPEC.md) — regras e requisitos.
-- [Arquitetura e stack](docs/ARCHITECTURE.md) — tecnologias, decisões e limitações atuais.
-- [Roadmap](docs/ROADMAP.md) — entregas, aceite e evolução para produção.
-- [AGENTS.md](AGENTS.md) — instruções operacionais para agentes de IA.
+- [Projeto — requisitos, arquitetura e entregas](docs/PROJECT.md).
+- [AGENTS.md](AGENTS.md) — diretrizes para agentes de IA.
 
 ## Implementação atual
 

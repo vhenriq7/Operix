@@ -4,9 +4,7 @@ Instruções de execução para agentes de IA que colaboram no desenvolvimento d
 
 ## Referências
 
-- `docs/SPEC.md`: escopo, requisitos e regras de negócio.
-- `docs/ARCHITECTURE.md`: arquitetura, tecnologias e restrições técnicas.
-- `docs/ROADMAP.md`: prioridades, marcos, critérios de aceite e estado de implementação.
+- `docs/PROJECT.md`: requisitos, regras de negócio, arquitetura, tecnologias, decisões pendentes, marcos e critérios de aceite.
 - `README.md`: apresentação e execução local.
 
 Antes de agir, consulte os documentos pertinentes à alteração; não replique conteúdo entre arquivos.
@@ -17,7 +15,7 @@ Antes de agir, consulte os documentos pertinentes à alteração; não replique 
 2. Implemente a menor mudança coesa e verificável, sem introduzir bibliotecas, camadas ou diretórios sem justificativa.
 3. Não presuma regra de negócio ausente: sinalize a decisão pendente antes de implementar comportamento irreversível.
 4. Inclua ou ajuste testes relevantes quando houver ambiente para isso; execute as verificações disponíveis e relate limitações.
-5. Atualize SPEC, ARCHITECTURE ou ROADMAP quando a mudança afetar respectivamente regra, decisão técnica ou estado da entrega.
+5. Atualize a seção pertinente de `docs/PROJECT.md` quando mudar uma regra de negócio, decisão técnica ou estado de entrega.
 6. Documente claramente mudanças incompatíveis, migrações e impactos em segurança/dados.
 
 ## Invariantes
