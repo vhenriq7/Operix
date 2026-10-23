@@ -1,307 +1,52 @@
-# Operix — Arquitetura
+# Operix — Arquitetura e stack
 
-**Status:** documento vivo  
-**Última atualização:** 2026-10-07
+**Estado:** documento técnico evolutivo. Requisitos em [SPEC.md](SPEC.md); prioridades em [ROADMAP.md](ROADMAP.md).
 
-Este documento registra decisões técnicas. Requisitos de negócio pertencem a [SPEC.md](SPEC.md); progresso pertence a [ROADMAP.md](ROADMAP.md).
+## Estratégia
 
-## 1. Princípios
+**Monólito modular** com API HTTP/JSON e PostgreSQL. Os limites internos evoluirão pelos domínios do produto, sem microserviços ou camadas artificiais no estágio atual. A separação arquitetural deve preservar transações consistentes entre pedidos, pagamentos, estoque e expedição.
 
-1. **Back-end first:** o aprendizado e a primeira versão do produto priorizam API e domínio.
-2. **Monólito modular primeiro:** não usar microserviços sem necessidade real.
-3. **Simplicidade antes de abstração:** novas camadas só entram quando resolvem um problema concreto.
-4. **SQL deve ser aprendido de verdade:** ORM não substitui entendimento de SQL.
-5. **Persistência e regras críticas devem ser testáveis.**
-6. **Multi-tenancy é requisito de segurança**, não apenas filtro de interface.
-7. **Documentação acompanha decisões reais**, distinguindo o que existe do que está planejado.
+## Stack e maturidade
 
-## 2. Estado técnico atual
-
-Implementado hoje:
-
-- Python 3.14 no ambiente local;
-- FastAPI;
-- Uvicorn;
-- Pydantic;
-- API REST inicial;
-- Swagger/OpenAPI gerado pelo FastAPI;
-- armazenamento temporário de clientes em lista Python para fins didáticos;
-- PostgreSQL local integrado à API para organizações e filiais;
-- banco local `operix` criado manualmente;
-- SQL praticado manualmente via `psql`;
-- estudo prévio de SQL com tabelas didáticas `organizacoes`, `filiais` e `clientes`;
-- SQLAlchemy usado para consultas e cadastros persistentes;
-- Alembic usado para versionar o schema do banco;
-- psycopg usado como driver PostgreSQL;
-- `app/database.py` com leitura de `DATABASE_URL`;
-- `engine`, `SessionLocal` e `get_db` usados nas rotas persistentes;
-- `app/models.py` com models SQLAlchemy iniciais `Organizacao` e `Filial`;
-- relacionamento SQLAlchemy entre organização e filiais;
-- Alembic inicializado com `alembic.ini` e diretório `alembic/`;
-- `alembic/env.py` configurado para usar `DATABASE_URL` e `Base.metadata`;
-- primeira migration versionada criando `organizacoes` e `filiais`;
-- banco local atualizado com `alembic upgrade head`;
-- cadastro e listagem de organizações e filiais pela API;
-- schemas Pydantic `OrganizacaoCriacao` e `FilialCriacao` para validar os dados de entrada;
-- verificação da organização vinculada antes do cadastro de uma filial;
-- escape de `%` na configuração do Alembic para aceitar URLs codificadas;
-- Git e GitHub.
-
-Ainda não implementado:
-
-- autenticação;
-- autorização/RBAC;
-- multi-tenancy no código;
-- testes automatizados;
-- Docker;
-- deploy.
-
-## 3. Stack atual e planejada
-
-| Área | Tecnologia | Situação |
+| Área | Tecnologia | Estado |
 | --- | --- | --- |
-| Linguagem | Python | Atual |
-| API | FastAPI | Atual |
-| Validação | Pydantic | Atual |
-| Servidor ASGI local | Uvicorn | Atual |
-| Banco relacional | PostgreSQL | Atual; integrado à API para organizações e filiais |
-| Consultas | SQL | Praticado via `psql`; consultas da aplicação executadas pelo ORM |
-| Driver PostgreSQL | psycopg | Atual; usado na conexão com PostgreSQL |
-| ORM | SQLAlchemy | Atual; conexão, modelos, relacionamentos e sessões usados pela API |
-| Migrações | Alembic | Configurado; primeira migration aplicada |
-| Testes | Pytest | Planejado |
-| Containers | Docker | Planejado |
-| Versionamento | Git + GitHub | Atual |
+| Linguagem e API | Python, FastAPI, Uvicorn | Implementados |
+| Validação e contrato HTTP | Pydantic, OpenAPI | Implementados |
+| Banco de dados | PostgreSQL | Integrado parcialmente |
+| Persistência | SQLAlchemy, psycopg | Em uso em organizações/filiais |
+| Migrações | Alembic | Configurado, migração inicial versionada |
+| Versionamento | Git e GitHub | Em uso |
+| Testes automatizados | Pytest (previsto) | Não implementado |
+| Contêineres | Docker (previsto) | Não implementado |
+| Interface operacional | Stack a definir | Não implementada |
+| Deploy e observabilidade | Infraestrutura a definir | Não implementados |
 
-O provedor de deploy ainda não foi escolhido.
+Dependências existentes são especificadas em `requirements.txt`. Novas tecnologias só devem ser adotadas mediante necessidade e revisão da decisão.
 
-## 4. Forma arquitetural inicial
+## Componentes existentes
 
-O Operix começa como **monólito modular**.
+- `app/main.py`: API inicial com saúde, clientes, organizações e filiais.
+- `app/database.py`: conexão e sessões SQLAlchemy via `DATABASE_URL`.
+- `app/models.py`: entidades `Organizacao` e `Filial`, com relacionamento.
+- `alembic/`: controle versionado da estrutura de banco.
+- `app/main.py` ainda utiliza **lista em memória para clientes**; apenas organizações e filiais usam persistência no PostgreSQL.
 
-Motivos:
+**Ainda inexistentes:** autenticação, RBAC, isolamento efetivo entre organizações, persistência real de clientes, testes automatizados, módulos transacionais completos, interface de negócio, integrações bancárias e implantação.
 
-- um único produto e um único time/desenvolvedor;
-- aprendizado mais direto;
-- transações atravessarão pedidos, estoque e conta do cliente;
-- microserviços adicionariam complexidade sem benefício atual.
+## Domínios previstos
 
-A estrutura interna será separada gradualmente conforme os módulos surgirem. Não criar pastas e camadas vazias antecipadamente apenas para parecer uma arquitetura "enterprise".
+Identidade e filiais; clientes; produtos e estoque; comercial (orçamentos/pedidos); conta do cliente e recebimentos; caixa; cobranças; logística/cargas; financeiro central; relatórios. A estrutura física de pastas será adaptada conforme funcionalidades forem implementadas.
 
-## 5. API
+## Regras técnicas transversais
 
-Diretrizes atuais:
+- **Autorização:** identidade autenticada e escopo por organização/filial em cada consulta e comando; o front-end não substitui controles de API. Testar acessos cruzados antes de disponibilizar dados reais.
+- **Integridade:** operações financeiras e de estoque devem manter transações, vínculos e histórico; definir representação exata para valores monetários (Decimal/NUMERIC ou centavos inteiros) antes do módulo financeiro; evitar `float`.
+- **Idempotência:** impedir cobrança, recebimento, reserva ou baixa duplicados por requisições repetidas ou concorrentes.
+- **Auditoria:** identificar usuário, data, contexto e motivo de eventos relevantes; estornos e correções não apagam o histórico operacional.
+- **Fronteiras de domínio:** venda não equivale a recebimento; recebimento não equivale a entrega; dinheiro com motorista não é dinheiro conferido no caixa; cheque recebido não é compensado; parcela prevista não é boleto bancário registrado.
+- **Estoque/logística:** quantidades são controladas por item e localização, incluindo retirada, caminhão, retorno e entregas parciais. Um pedido pode estar em múltiplas cargas.
+- **Qualidade:** testes unitários, integração e autorização devem acompanhar os módulos críticos; automação CI pode ser introduzida com a suíte de testes, sem alegar que já existe.
 
-- HTTP/JSON;
-- estilo REST quando adequado;
-- FastAPI como camada de entrada;
-- Pydantic para validação de entrada; as respostas de organizações e filiais são montadas explicitamente como dicionários e listas, sem schemas Pydantic de saída;
-- status HTTP semânticos;
-- documentação via OpenAPI/Swagger.
+## Ambientes e entrada em produção
 
-Rotas didáticas de clientes em memória e verificação da aplicação:
-
-```text
-GET  /
-GET  /health
-GET  /customers
-GET  /customers/{cliente_id}
-POST /customers
-PATCH /customers/{cliente_id}
-DELETE /customers/{cliente_id}
-```
-
-Rotas com persistência no PostgreSQL:
-
-```text
-GET  /organizacoes
-POST /organizacoes/
-GET  /filiais
-POST /filiais
-```
-
-As rotas de clientes continuam como exercício em memória; o módulo persistente de clientes será construído em etapa posterior.
-
-## 6. Persistência
-
-### Clientes em memória
-
-Clientes são guardados em uma lista Python apenas para demonstrar memória de processo.
-
-Consequência intencional:
-
-```text
-reiniciar a aplicação
-→ lista é recriada
-→ dados desaparecem
-```
-
-Esse mecanismo não é persistência de produção.
-
-Em paralelo, PostgreSQL já foi instalado localmente e o banco `operix` foi usado para praticar SQL manualmente com tabelas didáticas em português:
-
-```text
-organizacoes
-filiais
-clientes
-```
-
-Essas tabelas fizeram parte do aprendizado de SQL. Depois, o banco local foi limpo para que o Alembic passasse a controlar a criação do schema versionado.
-
-### Organizações e filiais no PostgreSQL
-
-A API já usa SQLAlchemy para cadastrar e consultar organizações e filiais no PostgreSQL, com schema versionado pelo Alembic.
-
-As dependências da Fase 4 já foram instaladas:
-
-```text
-SQLAlchemy
-Alembic
-psycopg
-```
-
-Configuração de conexão e sessão em `app/database.py`:
-
-```text
-DATABASE_URL
-engine
-SessionLocal
-get_db
-```
-
-A URL de conexão deve vir de variável de ambiente. Senhas reais não devem ser commitadas no repositório.
-
-As rotas persistentes recebem uma sessão por meio de `Depends(get_db)`. A dependência cria a sessão, disponibiliza-a para a requisição e a fecha no bloco `finally`.
-
-Modelos SQLAlchemy em `app/models.py`:
-
-```text
-Organizacao
-Filial
-```
-
-Esses modelos representam as tabelas `organizacoes` e `filiais`, possuem relacionamento Python entre organização e filiais e são usados pelas rotas da API. `Filial.organizacao_id` é uma chave estrangeira que referencia `Organizacao.id`.
-
-No cadastro, os schemas Pydantic validam a entrada; a rota cria uma instância do modelo SQLAlchemy, adiciona-a à sessão e confirma a transação com `commit()`. O cadastro de filial consulta a organização vinculada antes da inserção e responde `404` se ela não existir.
-
-Na listagem, a consulta ORM devolve objetos dos modelos. As rotas montam listas de dicionários com os campos da resposta, que o FastAPI serializa em JSON.
-
-Alembic foi inicializado com:
-
-```text
-alembic.ini
-alembic/env.py
-alembic/versions/
-```
-
-O `env.py` lê `DATABASE_URL`, usa `Base.metadata` como referência para autogeração e não armazena senha real no repositório.
-
-A leitura verifica a ausência de `DATABASE_URL` antes de tratar o texto. Ao fornecer a URL à configuração do Alembic, cada `%` é escapado como `%%`, pois o leitor de configuração interpreta esse caractere. Ao recuperar a opção, a URL original codificada é preservada para o SQLAlchemy. Esse escape não criptografa nem oculta credenciais.
-
-A primeira migration versionada é:
-
-```text
-81819ad65a8a_cria_tabelas_de_organizacoes_e_filiais.py
-```
-
-Ela cria `organizacoes` e `filiais` no `upgrade()` e remove essas tabelas no `downgrade()`.
-
-O progresso, as validações realizadas e o próximo passo de aprendizagem ficam em [ROADMAP.md](ROADMAP.md).
-
-A sequência pedagógica é:
-
-```text
-SQL e banco relacional
-→ PostgreSQL manual via psql
-→ integração com a aplicação
-→ SQLAlchemy
-→ Alembic
-```
-
-Sempre que uma operação importante for implementada via ORM, o conceito SQL equivalente deve ser entendido.
-
-## 7. Modelo multi-tenant
-
-A unidade superior do SaaS é a organização; uma organização possui filiais, representadas inicialmente pelos modelos `Organizacao` e `Filial`.
-
-O foco inicial de implementação está definido na SPEC. Tecnicamente, serão preservados os modelos de organização e filial e seus vínculos por chave estrangeira, mesmo durante o desenvolvimento dos fluxos de uma única empresa. O vínculo de organização deve continuar explícito na modelagem, sem depender de um identificador fixo no código.
-
-Regra arquitetural obrigatória:
-
-> Dados de uma organização nunca podem vazar para outra organização.
-
-A estratégia técnica exata de isolamento será definida antes da ampliação para múltiplas organizações. O contexto da organização deverá fazer parte das verificações de acesso nessa ampliação; login e permissões entre filiais, sozinhos, não comprovam isolamento entre empresas.
-
-As rotas atuais ainda não autenticam usuários nem restringem consultas por organização. A API desta etapa é destinada ao estudo local, não ao uso como SaaS em produção.
-
-Clientes poderão ter visibilidade restrita a uma filial ou compartilhada dentro da mesma organização, conforme [SPEC.md](SPEC.md).
-
-## 8. Autenticação e autorização
-
-Planejado:
-
-- autenticação de usuário;
-- hash seguro de senha;
-- identidade do usuário nas requisições;
-- autorização baseada em papéis/permissões (RBAC);
-- escopo por organização e filial.
-
-Detalhes de token, sessão e biblioteca de autenticação ainda não foram decididos.
-
-## 9. Dinheiro, estoque e quantidades
-
-Módulos que alteram dinheiro, crédito, estoque, atendimento parcial ou cargas deverão usar operações consistentes e, quando persistidos, transações de banco quando necessário.
-
-Valores monetários não devem usar `float` como representação persistente.
-
-A estratégia exata de tipo monetário será definida antes do módulo financeiro.
-
-## 10. Testes
-
-Testes serão introduzidos progressivamente.
-
-No foco inicial, validar autenticação e permissões entre as filiais da organização em desenvolvimento. A validação de isolamento entre organizações será obrigatória antes de disponibilizar acesso a outras empresas, conforme a etapa de ampliação no roadmap.
-
-Prioridade de cobertura:
-
-1. isolamento entre organizações/filiais;
-2. dinheiro e crédito;
-3. estoque;
-4. quantidades de pedido/entrega;
-5. permissões;
-6. fluxos de carga e transferência.
-
-A fase de qualidade do roadmap é uma revisão ampla, não o primeiro momento em que testes podem existir.
-
-## 11. Interface de demonstração
-
-O objetivo do produto agora inclui uma interface web **funcional, simples e conectada à API**, para que o gestor teste fluxos verdadeiros. Swagger continua para inspeção técnica, mas não substitui a experiência demonstrável. A tecnologia de front-end **ainda não foi decidida**; selecionar quando o marco correspondente começar, sem fingir que mockups são funcionalidades prontas.
-
-## 12. Decisões ainda abertas
-
-Não assumir sem discussão:
-
-- estratégia concreta de multi-tenancy;
-- biblioteca/forma de autenticação;
-- momento exato da baixa de estoque em transferências;
-- representação monetária definitiva;
-- política de excesso de capacidade de carga;
-- provedor de deploy;
-- tecnologia de front-end.
-
-Quando uma dessas decisões for tomada, registrar aqui o motivo e a consequência.
-
-
-## 13. Ambientes e limites entre módulos
-
-- **Agora:** portfólio e demonstração com dados sintéticos, sem substituir ERP atual nem importar dados reais sem autorização.
-- **Após aprovação explícita:** pré-produção, homologação, migração autorizada, segurança, backups, integração bancária, suporte, testes de recuperação e implantação gradual.
-- **Arquitetura base mantida:** monólito modular, FastAPI, PostgreSQL, SQLAlchemy e Alembic. Evitar microserviços e novas stacks sem decisão justificada.
-- **Limites separados:** venda/pedido, recebimento de caixa, conta do cliente, carteira de crédito, conta bancária da empresa, cheque, boleto, estoque físico, carga e entrega. Uma ação não implica automaticamente as demais.
-- **Persistência financeira:** usar representação monetária exata (Decimal/NUMERIC ou centavos inteiros a decidir), transações, registros auditáveis e proteção contra lançamento duplicado/repetição da requisição.
-- **Recebimento do motorista:** distingue pagamento do cliente, dinheiro ainda em posse do motorista e transferência confirmada ao caixa. Despesa de fornecedor sai de conta bancária ou cheque, não do caixa da loja salvo operação específica autorizada.
-- **Estoques:** localização depósito/caminhão e quantidades em pedido/carga/entrega são distintas; idempotência e testes contra alocação duplicada.
-- **Segurança:** escopo de organização/filial é verificado na API; acesso em interface não substitui autorização no servidor. Dados sensíveis, logs, cópias de segurança e controle de permissões exigem revisão antes do uso real.
-- **Integrações:** impressão operacional não é documento fiscal; cronograma de boleto não é boleto bancário emitido; cheque recebido não é compensação.
-
-Fluxos detalhados em [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md); decisões comerciais em SPEC; marcos e gates de entrega no ROADMAP.
+Etapa atual: desenvolvimento local e demonstração com dados sintéticos. Produção exige aprovação formal, revisão de segurança e LGPD, integração bancária homologada, testes de carga e concorrência, backup e restauração, monitoramento, plano de rollback e suporte. Nenhum desses controles é considerado concluído por estar documentado.
