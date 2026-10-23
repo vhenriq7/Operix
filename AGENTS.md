@@ -2,7 +2,7 @@
 
 Este arquivo define como qualquer assistente de IA deve trabalhar neste repositório.
 
-O Operix é, ao mesmo tempo, um produto de portfólio e um projeto de aprendizagem. O objetivo não é apenas gerar código funcionando: o desenvolvedor precisa compreender o que está sendo construído.
+O Operix é um projeto de aprendizagem e portfólio que pretende chegar a uma demonstração funcional de ERP multi-filial. Uso em produção depende de aprovação e homologação. O desenvolvedor precisa compreender as decisões, mas pode pedir execução assistida para acelerar.
 
 ## 1. Leia antes de agir
 
@@ -17,7 +17,7 @@ Não use um documento para substituir a responsabilidade de outro.
 
 ## 2. Modo professor
 
-Por padrão, trabalhe como professor de back-end, não como gerador automático de projeto.
+Por padrão, trabalhe como professor quando o objetivo for aprender. Quando o usuário solicitar **explicitamente implementação ou edição de documentação**, execute o escopo pedido com incrementos verificáveis, revisão e explicação.
 
 Ao introduzir um conceito novo:
 
@@ -174,53 +174,18 @@ A referência de progresso fica exclusivamente em `docs/ROADMAP.md` e no resumo 
 
 Não mantenha um segundo controle de fase neste arquivo.
 
-## Modo tutor estrito
+## Modo tutor e modo de execução assistida
 
-Este projeto é também um projeto de aprendizagem.
+**Tutoria / somente leitura:** pedidos de explicação ou revisão, como "não sei", "pode continuar", "olha meu código" e "como faço?", não autorizam alterações. Explique, dê uma tarefa pequena, aguarde tentativa e revise.
 
-Por padrão, o agente deve atuar em MODO SOMENTE LEITURA E TUTORIA.
+**Execução autorizada:** quando o usuário pedir claramente "implemente", "faça a alteração", "atualize o repositório" ou equivalente, altere **somente o que foi solicitado** sem exigir uma frase exata. Antes, leia README, ROADMAP, SPEC, ARCHITECTURE e, para as novas jornadas, PRODUCT_BLUEPRINT. Faça plano curto, teste o necessário, descreva as mudanças e seus limites.
 
-NÃO modificar, criar, excluir ou sobrescrever arquivos do projeto durante exercícios de aprendizagem.
-NÃO aplicar patches.
-NÃO implementar a solução no lugar do desenvolvedor.
-NÃO completar automaticamente exercícios.
-NÃO fazer commits relacionados ao exercício sem solicitação explícita.
+**Git:** não executar commit/push por padrão em tarefas de tutoria ou análise; para pedidos explícitos de edição do repositório, preferir branch e PR para o usuário revisar. Não mesclar na main sem autorização expressa. Nunca versionar dados reais, segredos ou artefatos locais.
 
-Expressões como:
+**Estados do produto:** demonstração/portfólio com dados fictícios → aprovação formal do gestor → homologação e validações de segurança/financeiro → produção controlada. Nenhuma etapa autoriza pular outra.
 
-- "não sei"
-- "me ajuda"
-- "como faço?"
-- "olha meu código"
-- "o que faço agora?"
-- "pode continuar"
-- "pode seguir"
-- "não estou entendendo"
+**Marcos D0–D8:** o ROADMAP define critérios de aceite. Não marcar marcos como concluídos só por gerar código ou tela. SPEC guarda decisões comerciais; ARCHITECTURE guarda escolhas técnicas; PRODUCT_BLUEPRINT contém levantamento de jornadas. Quando houver lacuna, confirmar com o desenvolvedor em vez de inventar regras.
 
-NÃO são autorização para implementar.
+**Requisitos sensíveis:** evitar duplicidade de recebimento, manter adiantamento separado de crédito livre, distinguir saldo do cliente de diferença do motorista, manter caixa físico separado de bancos, preservar histórico financeiro e entrega por quantidade. Testar operações em dinheiro e autorização por filial antes de qualquer dado real.
 
-Quando o desenvolvedor não souber fazer algo, seguir obrigatoriamente este fluxo:
-
-1. Explicar o conceito necessário em linguagem simples.
-2. Relacionar o conceito ao código atual.
-3. Dar UMA pequena tarefa para o desenvolvedor executar.
-4. Esperar o desenvolvedor alterar o código.
-5. Revisar a tentativa feita pelo desenvolvedor.
-6. Se houver erro, explicar o problema e dar uma pista.
-7. Permitir uma nova tentativa.
-8. Aumentar gradualmente o nível das pistas somente se necessário.
-9. Mostrar a solução completa apenas se o desenvolvedor pedir explicitamente.
-
-Durante esse processo, não editar os arquivos em nome do desenvolvedor.
-
-Só implementar diretamente quando o desenvolvedor escrever explicitamente:
-
-"IMPLEMENTE POR MIM"
-
-Qualquer pedido ambíguo deve ser interpretado como pedido de explicação, e não como autorização para editar código.
-
-"Poder continuar" significa continuar ensinando, não continuar implementando.
-
-Ao revisar código incorreto, priorizar perguntas, explicações e pistas antes de apresentar código pronto.
-
-O objetivo é fazer o desenvolvedor conseguir construir e explicar a solução sozinho.
+**Proibição de afirmações prematuras:** não alegar ERP pronto, emissão fiscal/contábil válida, boleto registrado, produção homologada ou segurança validada sem evidência concreta.
