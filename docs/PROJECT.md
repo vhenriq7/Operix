@@ -127,6 +127,22 @@ Esta seção centraliza requisitos de produto, regras funcionais e pendências. 
 - Emissão fiscal/contábil é uma frente posterior que exige validação especializada.
 - Antes do piloto real: direitos de uso, contrato, preço, suporte, disponibilidade, backups, migração, LGPD e segurança.
 
+#### Validações de negócio para D1
+
+As regras de identidade e alcance já registradas em **Identidade, filiais e equipe** e **Filiais e conta do cliente** permanecem requisitos, ainda sem implementação. Os pontos abaixo detalham as decisões necessárias ao planejamento de D1; não representam respostas aprovadas.
+
+| Referência | Decisão pendente | Impacto no D1 |
+| --- | --- | --- |
+| B1 | Representação do Dono, quantidade de proprietários, seus poderes e transferência de responsabilidade | Definir os papéis iniciais e sua relação com a administração principal |
+| B2 | Matriz de ações por função, acúmulo de papéis e exercício de funções diferentes entre filiais | Aprovar concessões, restrições e alcance das atribuições |
+| B3 | Quem cria/desativa contas, configura papéis, concede exceções e delega poderes; procedimento de substituição do último administrador | Delimitar a administração de acessos sem permitir elevação indevida de privilégios |
+| B4 | Dados mínimos das contas e necessidade imediata de cadastrar funcionários sem login | Delimitar identidade de acesso e cadastro operacional, sem antecipar um módulo de RH |
+| B5 | Filiais autorizadas por perfil e inclusão automática ou explícita de novas filiais | Definir alcance operacional e consultas consolidadas |
+| B6 | Adequação dos prazos de sessão propostos em T4, sessões simultâneas e entrega, troca e recuperação da credencial inicial | Aprovar o ciclo de acesso e recuperação das contas |
+| B7 | Destino das rotas de clientes em memória durante D1 | Aprovar a compatibilidade da API; autenticar uma lista global não implementa isolamento |
+
+A repetição do e-mail entre organizações continua pendente para a ampliação do uso. O desenho técnico deve identificar a organização no login sem presumir uma política global de unicidade. As decisões sobre estoque, cobrança e integrações permanecem nos módulos correspondentes e não precisam ser encerradas para iniciar D1.
+
 
 ### Regras complementares consolidadas
 
@@ -204,6 +220,86 @@ Identidade e filiais; clientes; produtos e estoque; comercial (orçamentos/pedid
 - **Estoque/logística:** quantidades são controladas por item e localização, incluindo retirada, caminhão, retorno e entregas parciais. Um pedido pode estar em múltiplas cargas.
 - **Qualidade:** testes unitários, integração e autorização devem acompanhar os módulos críticos; automação CI pode ser introduzida com a suíte de testes, sem alegar que já existe.
 
+### Planejamento técnico de D1
+
+**Estado:** proposta registrada para revisão; implementação não iniciada. A inclusão deste planejamento não aprova bibliotecas, modelos, políticas ou alterações de contrato. Os incrementos estão na seção **Entregas incrementais de D1**.
+
+#### Base técnica já adotada
+
+Aplicam-se a D1 a stack e o monólito modular descritos em **Estratégia** e **Stack e maturidade**, a persistência e as migrações existentes e os controles exigidos em **Regras técnicas transversais**. Essa base deve ser preservada; autenticação, autorização e isolamento efetivo continuam inexistentes no código.
+
+Conta vinculada à organização, e-mail único dentro dela, alcance por filial e permissões configuráveis são requisitos já registrados na seção de produto, não modelos implementados ou prova de homologação empresarial.
+
+#### Recomendações técnicas ainda não aprovadas
+
+Todos os itens T1–T7 abaixo aguardam validação técnica e, quando indicado, as decisões de negócio B1–B7. As estruturas são conceituais; o schema definitivo dependerá do recorte aprovado.
+
+##### T1 — Identidade e vínculos
+
+| Estrutura proposta | Responsabilidade |
+| --- | --- |
+| `Usuario` | Identidade individual de acesso: organização, nome, e-mail normalizado, hash de senha, situação ativa e datas de controle |
+| `UsuarioFilial` | Vínculos explícitos entre conta e filiais autorizadas |
+| `Papel` e suas permissões | Agrupamento configurável de ações, pertencente à organização |
+| Atribuição de papel | Associação de usuário e papel com escopo explícito de organização ou filial |
+| Exceção individual | Concessão ou negação de uma ação ao usuário em um escopo determinado |
+
+Recomenda-se garantir no banco a unicidade do e-mail normalizado por organização. A regra de normalização e as cardinalidades de papéis serão definidas no contrato de identidade, considerando B2 e B4.
+
+Funcionários, administradores e proprietários com acesso usariam a mesma entidade `Usuario`; seus poderes decorreriam das atribuições. A recomendação é um papel próprio para proprietário, condicionado a B1 e sem atalho de autorização irrestrita. Cadastro operacional de colaborador sem login, se necessário, seria separado da conta; sua inclusão em D1 depende de B4.
+
+##### T2 — Papéis, ações e exceções
+
+Recomenda-se RBAC, controle de acesso por papéis, complementado por exceções individuais. O catálogo de ações seria conhecido pelo servidor, por exemplo `usuarios.criar`, `usuarios.desativar` e `filiais.consultar`. A administração poderia agrupar ações existentes em papéis; cadastrar um nome de permissão não criaria uma funcionalidade.
+
+A proposta distingue permissões administrativas de organização e atribuições operacionais por filial. Um valor ausente de filial não significaria acesso irrestrito. Para uma ação no escopo avaliado, a precedência proposta é:
+
+1. exigir conta ativa e contexto organizacional válido;
+2. exigir vínculo com a filial, quando aplicável;
+3. verificar concessão por papel ou por exceção individual;
+4. fazer uma negação explícita aplicável prevalecer sobre concessões;
+5. negar na ausência de concessão.
+
+Exceções não ampliariam organização ou filiais autorizadas. A matriz, a composição de papéis, a configuração individual e os poderes de delegação dependem de B2, B3 e B5. Alterações de acesso seriam auditadas e consideradas na próxima requisição, sem depender de permissões antigas incorporadas a uma credencial.
+
+##### T3 — Proteção de senhas
+
+Recomenda-se Argon2id por `pwdlib[argon2]`, com geração e verificação feitas pela biblioteca e armazenamento apenas de `senha_hash`. A dependência ainda não integra as dependências declaradas nem foi adotada pelo projeto. Senhas, hashes e tokens não seriam expostos em respostas operacionais ou logs; a credencial de sessão seria entregue apenas no fluxo autorizado de autenticação.
+
+O primeiro incremento proposto é um componente isolado de senha, com testes de senha correta/incorreta, hashes distintos e verificáveis para a mesma senha e rejeição segura de hash inválido. A compatibilidade da biblioteca com o Python do projeto e o contrato de entrada devem ser verificados antes da integração. O ciclo de credenciais iniciais e recuperação depende de B6.
+
+##### T4 — Login e sessões revogáveis
+
+Recomenda-se login por e-mail e senha no contexto de uma organização. Esse contexto poderia estar pré-selecionado na demonstração de uma empresa; sua apresentação não autorizaria acesso. Após autenticar, a organização ficaria vinculada à sessão e seria validada pelo servidor.
+
+A proposta é uma sessão persistida no PostgreSQL, com token opaco aleatório de 32 bytes de entropia. Somente seu digest SHA-256 seria armazenado, acompanhado de usuário, criação, última atividade, expiração e revogação. Identidade, situação da conta e autorizações atuais seriam verificadas em cada requisição.
+
+Para a API e o Swagger iniciais, recomenda-se `Authorization: Bearer` com os recursos do FastAPI. Não se propõe JWT, Redis ou serviço externo neste recorte. O transporte por cookie `HttpOnly` e `Secure`, acompanhado de proteção CSRF, dependeria da definição da interface web futura e não alteraria o modelo de sessão.
+
+**Política sugerida, não aprovada:** 30 minutos de inatividade e oito horas de duração máxima, configuráveis e verificadas no servidor. Atividade não prorrogaria o prazo absoluto. Recomenda-se logout da sessão atual e revogação de todas as sessões após desativação ou redefinição de senha; a adequação operacional e as sessões simultâneas dependem de B6.
+
+O login incluiria resposta genérica para credenciais inválidas e limitação de tentativas. Parâmetros, persistência desse controle e contrato de expiração seriam definidos na revisão técnica, sem tratar memória de um único processo como controle compartilhado entre instâncias.
+
+##### T5 — Primeira conta e administração
+
+Recomenda-se provisionar a primeira conta administrativa por comando local controlado, na organização existente, solicitando a senha sem exibi-la. Não haveria cadastro administrativo público, senha padrão ou segredo passado em argumento de comando.
+
+O provisionamento recusaria recriação e seria transacional, com proteção contra duas inicializações concorrentes. A API administrativa posterior permitiria gerenciar contas, filiais autorizadas, papéis, exceções e revogação de sessões, sempre dentro da autoridade de delegação aprovada em B3.
+
+Recomenda-se proteger o último acesso administrativo efetivo contra desativação ou retirada de poderes, inclusive em operações concorrentes. A auditoria registraria responsável, momento e alteração. Destinatário inicial, limites de delegação, substituição administrativa e entrega de credenciais dependem de B3 e B6.
+
+##### T6 — Isolamento no servidor e no banco
+
+Para atender às regras de autorização já registradas, recomenda-se obter o contexto organizacional da sessão válida e aplicar escopo nas consultas e comandos antes de retornar ou alterar recursos. Identificadores recebidos por URL ou corpo seriam apenas seletores, sujeitos à autorização.
+
+Restrições relacionais, inclusive chaves estrangeiras compostas quando necessárias, impediriam associar conta, filial ou papel de organizações diferentes. Consultas consolidadas agregariam somente filiais autorizadas para a ação consultada. Esses controles complementariam, sem substituir, os testes de acesso cruzado.
+
+##### T7 — Integração com a base existente
+
+Recomenda-se preservar `Organizacao`, `Filial`, `get_db` e o histórico do Alembic, acrescentando apenas os módulos e migrações necessários. A separação de autenticação e autorização seria gradual, sem nova infraestrutura ou camadas genéricas antecipadas.
+
+O rascunho local de login em `app/main.py` não implementa D1 e deve permanecer preservado até uma tarefa de integração expressamente autorizada. As rotas persistentes receberiam identidade, permissão e escopo. Para `/customers`, recomenda-se indisponibilidade na API operacional até a persistência de D2; essa mudança de contrato depende de B7 e não é uma decisão adotada.
+
 ### Ambientes e entrada em produção
 
 Etapa atual: desenvolvimento local e demonstração com dados sintéticos. Produção exige aprovação formal, revisão de segurança e LGPD, integração bancária homologada, testes de carga e concorrência, backup e restauração, monitoramento, plano de rollback e suporte. Nenhum desses controles é considerado concluído por estar documentado.
@@ -228,6 +324,26 @@ Etapa atual: desenvolvimento local e demonstração com dados sintéticos. Produ
 
 Os marcos D1–D5 compõem a primeira demonstração funcional; D6–D8 ampliam os fluxos. O detalhamento e decisões em aberto estão na seção de requisitos deste documento. Não anunciar como implementada qualquer linha ainda pendente.
 
+### Entregas incrementais de D1
+
+**Planejamento:** documentado como proposta pendente de validação. **Implementação de D1:** não iniciada; o status do marco permanece inalterado. Os critérios abaixo são propostos e só devem ser usados para concluir entregas após aprovação do respectivo escopo e verificação do código.
+
+As referências B1–B7 identificam as validações de negócio; T1–T7 identificam as recomendações técnicas. A sequência permite aprovações por incremento: decisões futuras de outros módulos não bloqueiam o componente isolado de senhas.
+
+| Incremento | Entrega proposta | Dependências | Critério de aceite proposto | Status |
+| --- | --- | --- | --- | --- |
+| D1.0 | Validar o recorte e os contratos de identidade | Revisão de B1–B7 e T1–T7 conforme o incremento | Registrar neste documento decisões aprovadas, responsáveis pela validação e pendências que bloqueiam cada entrega | Planejamento registrado; validações pendentes |
+| D1.1 | Componente de senha e testes isolados | Aprovação de T3 e contrato de entrada; adoção controlada das dependências de hash e testes | Casos de T3 passam; biblioteca compatível com o ambiente; nenhum segredo exposto; rascunho de `app/main.py` preservado | Não iniciado |
+| D1.2 | Persistência das contas e vínculos | D1.1; contrato de identidade aprovado em D1.0, incluindo T1 e T6 | Migração reproduzível em PostgreSQL de teste; unicidade por organização; vínculos de outra organização rejeitados; dados existentes preservados | Não iniciado |
+| D1.3 | Persistência e avaliação de papéis e exceções | D1.2; matriz, escopos e precedência aprovados em D1.0 | Testes demonstram concessão, negação, ausência de permissão e composição aprovada, sem ampliar organização ou filial | Não iniciado |
+| D1.4 | Provisionamento da primeira administração | D1.3; autoridade inicial e fluxo T5 aprovados | Conta inicial criada pelo fluxo controlado; repetição e execução concorrente não recriam administração nem expõem credenciais | Não iniciado |
+| D1.5 | Login, identificação, sessão e logout | D1.4; T4 e política B6 aprovados | Credenciais válidas autenticam; inválidas, expiradas ou revogadas falham; limites de tentativa verificados; logout invalida a sessão | Não iniciado |
+| D1.6 | Administração de contas e acessos | D1.3 e D1.5; delegação, recuperação e proteção administrativa aprovadas | Gestão respeita poderes delegáveis; mudanças são auditadas e efetivas na próxima requisição; revogação e proteção do último administrador resistem à concorrência | Não iniciado |
+| D1.7 | Integração de autorização na API existente | D1.6; T7 e destino de `/customers` aprovados | Identificadores adulterados não ultrapassam escopos; consultas consolidadas e ações respeitam permissões; rotas públicas e protegidas têm contrato explícito | Não iniciado |
+| D1.8 | Verificação integrada e revisão do marco | D1.1–D1.7 | Suíte com dados sintéticos e PostgreSQL de teste comprova os contratos, acessos cruzados e regressões; documentação reflete somente resultados validados | Não iniciado |
+
+A primeira tarefa de implementação proposta é **D1.1**, após aprovação de sua decisão técnica e autorização para alterar arquivos. Concluir esse componente não conclui o marco D1. O fechamento do marco depende do critério geral e das evidências integradas de D1.8; D0 permanece aberto para requisitos ainda não validados.
+
 ### Gates de implantação
 
 - **G1 — decisão comercial:** apresentar demonstração; obter aprovação explícita, definição de escopo, responsabilidades e condições de uso.
@@ -238,4 +354,4 @@ Os marcos D1–D5 compõem a primeira demonstração funcional; D6–D8 ampliam 
 
 Cada mudança deve ter escopo rastreável, critério de aceite, implementação, verificação (automatizada quando disponível), revisão por PR e atualização pontual da documentação afetada. O status depende de evidência testável, não da existência de um arquivo ou interface.
 
-**Próxima prioridade:** concluir decisões abertas de D0 relevantes a usuários e permissões, depois iniciar D1 preservando a API existente.
+**Próxima prioridade:** validar as decisões de D0 e as recomendações técnicas necessárias ao próximo incremento de D1; após aprovação e autorização, iniciar D1.1, preservando a API existente e o rascunho local. A documentação deste plano não inicia a implementação.
