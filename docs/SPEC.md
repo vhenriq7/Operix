@@ -1,6 +1,6 @@
 # Operix — Especificação do produto
 
-**Versão:** 0.2  
+**Versão:** 0.3  
 **Status:** requisitos iniciais em evolução  
 **Tipo:** SaaS de gestão operacional multi-filial
 
@@ -30,7 +30,7 @@ Referência operacional inicial: aproximadamente **200 pedidos por dia**, inclui
 
 ## 2. Limite do produto
 
-O Operix não pretende inicialmente substituir um ERP fiscal/contábil completo.
+A versão atual é um portfólio com objetivo de demonstração funcional. O Operix não pretende inicialmente substituir um ERP fiscal/contábil completo nem os sistemas operacionais atuais. O escopo futuro pode ser mais amplo, após aprovação e planejamento.
 
 O foco é a operação comercial, conta do cliente, estoque e logística.
 
@@ -51,7 +51,7 @@ O foco é a operação comercial, conta do cliente, estoque e logística.
 - veículos, cargas, conferência e entregas;
 - dashboards operacionais.
 
-### Fora do escopo inicial
+### Fora do primeiro corte demonstrável, mas planejado para fases seguintes
 
 - contas a pagar da empresa;
 - folha de pagamento;
@@ -65,7 +65,7 @@ O foco é a operação comercial, conta do cliente, estoque e logística.
 
 ### Foco da primeira versão
 
-A primeira versão será desenvolvida e validada para uma única organização com várias filiais. O objetivo é estabilizar os fluxos operacionais dessa empresa antes de ampliar o uso para outras organizações.
+A primeira versão será desenvolvida e validada para uma única organização com três filiais, em ambiente demonstrativo com dados fictícios. O levantamento de módulos e jornadas fica em [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md). O objetivo é estabilizar os fluxos operacionais dessa empresa antes de ampliar o uso para outras organizações.
 
 A oferta como SaaS para múltiplas organizações continua prevista para uma etapa posterior. Essa ampliação depende da definição das regras pendentes e da validação de isolamento dos dados antes de disponibilizar acesso a outras empresas.
 
@@ -575,3 +575,12 @@ Antes dos módulos correspondentes, decidir explicitamente:
 - autorização quando compra ultrapassa limite.
 
 Quando uma decisão for tomada, atualizar este documento antes ou junto da implementação.
+
+
+## 30. Revisão de escopo — necessidades levantadas em 2026-10-23
+
+As conversas com a operação ampliaram a visão além do MVP original: **caixa com abertura/fechamento, sangria e suprimento; pagamentos mistos; crédito livre separado de adiantamento vinculado e dívida; fiado com vencimento original e próxima cobrança; impressão de pedidos; entregas parciais e cargas por veículo; prestação de contas de motorista; cheques; boletos com prazos configuráveis; contas bancárias/contas a pagar; e BI das três filiais**.
+
+Essas regras estão detalhadas por jornada em [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md), documento complementar de levantamento. Antes de implementar cada módulo, validar as decisões ainda abertas ali e incorporar à seção pertinente desta SPEC; a SPEC continua sendo a fonte normativa das regras de negócio.
+
+**Prioridade:** portfólio/demonstração com dados fictícios; eventual produção apenas após aceite e validação de segurança e operação. **Nada nesta revisão declara módulo novo implementado.**
