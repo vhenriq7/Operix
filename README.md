@@ -1,12 +1,20 @@
 # Operix
 
-> SaaS de gestão operacional para empresas com múltiplas filiais.
+> ERP operacional e financeiro multi-filial em desenvolvimento, inicialmente como portfólio e demonstração funcional.
 
 O **Operix** é um projeto de estudo e portfólio focado em back-end. O produto busca integrar vendas, clientes, conta comercial, estoque, transferências entre filiais, cargas e entregas, enquanto o desenvolvimento é usado para aprender Python, APIs, SQL, PostgreSQL e arquitetura de software na prática.
 
+## Objetivo do Operix
+
+**Agora: portfólio e demonstração funcional**, usando dados fictícios para validar com a direção de uma empresa com três filiais. **Depois, e somente se aprovado:** homologação e preparação para produção; não considerar protótipo pronto para substituir os sistemas existentes.
+
+A visão é um ERP com facilidade de uso no caixa, sem perder as necessidades de vendas, estoque, créditos e fiados, financeiro, cheques, boletos, transporte, cargas, relatórios consolidados e, futuramente, fiscal/contábil. O primeiro objetivo é demonstrar um fluxo completo e real — **não apenas telas bonitas**.
+
+Leia o [mapa detalhado de módulos e regras](docs/PRODUCT_BLUEPRINT.md), a [especificação](docs/SPEC.md), a [ordem de entregas](docs/ROADMAP.md) e as [instruções dos agentes](AGENTS.md). Os módulos novos estão **planejados**, não implementados.
+
 ## Estado atual
 
-**Fase 5 — Usuários, autenticação e permissões (em andamento).**
+**Fase 5 — Usuários, autenticação e permissões (em andamento).** Os novos marcos de demonstração são metas; não significam funcionalidades concluídas.
 
 O foco inicial é desenvolver e validar os fluxos de uma empresa com várias filiais. A ampliação para outras empresas permanece planejada, conforme [docs/SPEC.md](docs/SPEC.md).
 
@@ -45,7 +53,8 @@ O progresso detalhado e o próximo passo ficam em [docs/ROADMAP.md](docs/ROADMAP
 | [AGENTS.md](AGENTS.md) | Como Codex e outros agentes de IA devem trabalhar e ensinar neste repositório |
 | [docs/SPEC.md](docs/SPEC.md) | Requisitos de negócio, regras do SaaS e limites de escopo |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Decisões técnicas, stack e princípios de arquitetura |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases de desenvolvimento, aprendizagem, progresso e critérios de conclusão |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases técnicas, marcos de demonstração e critérios para eventual produção |
+| [docs/PRODUCT_BLUEPRINT.md](docs/PRODUCT_BLUEPRINT.md) | Jornadas e funcionalidades levantadas com a operação real; a implementar |
 | `app/` | Código da aplicação |
 | `requirements.txt` | Dependências Python atualmente instaladas |
 
