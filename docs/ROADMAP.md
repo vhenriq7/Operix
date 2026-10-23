@@ -6,11 +6,11 @@ Regras detalhadas do produto ficam em [SPEC.md](SPEC.md). Decisões técnicas fi
 
 ## Status geral
 
-**Fase atual:** Fase 5 — Usuários, autenticação e permissões
+**Fase atual (trilha técnica):** Fase 5 — Usuários, autenticação e permissões
 
-**Próxima fase:** Fase 6 — Clientes
+**Próxima fase técnica:** Fase 6 — Clientes
 
-**Objetivo imediato:** levantar os dados necessários para as contas de usuário da organização em foco e estudar o armazenamento seguro de senhas antes de implementar o modelo.
+**Objetivo imediato:** levantar dados das contas de usuário, estudar senhas seguras e validar as regras do marco D0 antes da execução D1.
 
 Legenda:
 
@@ -19,6 +19,8 @@ Legenda:
 - ⬜ não iniciada.
 
 ## Visão do MVP
+
+O primeiro corte demonstrável são os marcos D1–D5. O MVP ampliado prevê os fluxos abaixo sem exigir tudo antes da primeira apresentação.
 
 O MVP pretendido deve demonstrar um fluxo operacional coerente de uma organização multi-filial, incluindo:
 
@@ -39,6 +41,35 @@ O escopo poderá ser reduzido se necessário para manter qualidade e aprendizage
 ### Estratégia de implementação
 
 Por decisão do desenvolvedor, os fluxos serão construídos e validados primeiro em uma empresa com várias filiais. A ampliação para múltiplas organizações será planejada após estabilizar esses fluxos, para manter o aprendizado incremental. As fases existentes continuam na mesma ordem; a validação de segurança para oferecer acesso a outras empresas fica na etapa futura de ampliação descrita ao final deste roadmap.
+
+---
+
+## Plano de entrega por valor (sem alterar estado das fases técnicas)
+
+Além das fases 0–20 abaixo, haverá **marcos D0–D8**. Estes marcos ordenam a demonstração para o gestor; a trilha técnica conserva seu status real. **Nenhum marco foi implementado pelo simples fato de estar documentado.** Não prometer datas sem estimativas.
+
+| Marco | Meta de demonstração | Critério de aceite com dados fictícios | Estado |
+| --- | --- | --- | --- |
+| D0 — requisitos | Validar os cenários e as decisões abertas em PRODUCT_BLUEPRINT + SPEC | Os quatro casos de pagamento/adiantamento, caixas, cobrança e entrega parcial estão reproduzíveis em exemplos | 🟡 levantamento, não aprovado |
+| D1 — acessos | Usuários e permissão por função/filial | Um caixa não consulta filial proibida; a administração acessa o consolidado | ⬜ |
+| D2 — cadastros | Cliente PF/PJ, produto e estoque básico por filial | Cadastros persistem, respeitam regras e estoque/preço da filial | ⬜ |
+| D3 — comercial | Orçamento, descontos com alerta, clone, pedido aberto, impressão | Salvar, converter e imprimir pedido com todos os itens e endereço sem gerar pagamento fictício | ⬜ |
+| D4 — financeiro essencial | Recebimento misto/parcial, fiado, crédito livre separado, adiantamento, caixa e contagem | Dívida R$ 90 e crédito R$ 2.000 coexistem; pagamento misto concilia caixa e contas a receber | ⬜ |
+| D5 — cobrança + gerencial | Cobranças, datas originais e próximo contato, painel comparativo | Dívida permanece vencida no relatório enquanto sai da fila diária até próxima cobrança; consolidar filiais | ⬜ |
+| D6 — logística | Cargas, romaneio, entregas parciais, pendências, prestação de contas por pedido | Entrega parcial reaparece sem data obrigatória; dinheiro do motorista só entra após conferência | ⬜ |
+| D7 — financeiro ampliado | Boleto real mediante integração, prazos configuráveis, cheques, bancos, contas a pagar | Parcelas somam valor exato; cheque repassado liga-se à despesa; saída bancária não reduz caixa físico | ⬜ |
+| D8 — validação comercial | Testes, UX, relatórios e roteiro de demonstração sem dados reais | Gestor executa jornadas e confere números, relatórios e documentos | ⬜ |
+
+### Portões de mudança de ambiente
+
+- **G1 — Aprovação pela direção:** demonstrar funcionamento; registrar escopo, autorização, condições de uso, custos, suporte e responsabilidades.
+- **G2 — Homologação/pré-produção:** implementar testes de autorização, finanças, estoque, caixa, carga e integrações bancárias; backup/restauração, proteção de dados, deploy, monitoramento e plano de rollback.
+- **G3 — Produção controlada:** iniciar implantação apenas após G1 e G2; comparar resultados com sistema anterior e acompanhar suporte. **G3 não é automático.**
+- Expansão para outras empresas só depois de validar isolamento multi-tenant e compromissos operacionais.
+
+**Primeiro roteiro demonstrável (D1–D5):** cliente e produto → orçamento com desconto/alerta → pedido aberto e impressão → pagamentos Pix + fiado com vencimento e crédito livre intocado → caixa e dashboard das três filiais. Logística e contas a pagar entram em seguida sem bloquear a primeira apresentação.
+
+**Foco fiscal/contábil completo:** visão de longo prazo, com requisitos especializados fora dos marcos D1–D8 atuais, salvo as integrações de boleto regularizadas em D7.
 
 ---
 
@@ -372,6 +403,8 @@ O sistema sabe quanto foi comprado, retirado, destinado à entrega, entregue e a
 
 ## ⬜ Fase 10 — Conta do cliente e pagamentos
 
+O fluxo mínimo deve aparecer antes no marco D4, sem marcar esta fase avançada inteira como concluída.
+
 ### Funcionalidades
 
 - pagamento integral/parcial;
@@ -464,7 +497,7 @@ Antes de implementar, decidir em qual momento cada estoque é movimentado.
 
 ## ⬜ Fase 18 — Dashboards e consultas
 
-Indicadores por filial e consolidados da organização.
+O painel financeiro inicial entra em D5; a revisão avançada desta fase permanece futura. Indicadores por filial e consolidados da organização.
 
 Aprender consultas agregadas, filtros, índices e otimização conforme necessidade.
 
