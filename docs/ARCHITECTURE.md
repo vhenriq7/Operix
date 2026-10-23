@@ -273,13 +273,9 @@ Prioridade de cobertura:
 
 A fase de qualidade do roadmap é uma revisão ampla, não o primeiro momento em que testes podem existir.
 
-## 11. Front-end
+## 11. Interface de demonstração
 
-Front-end não é prioridade inicial.
-
-Durante o desenvolvimento da API, Swagger/OpenAPI pode servir como interface de inspeção e teste.
-
-Uma interface visual de demonstração poderá ser escolhida no futuro. Nenhuma tecnologia de front-end está decidida.
+O objetivo do produto agora inclui uma interface web **funcional, simples e conectada à API**, para que o gestor teste fluxos verdadeiros. Swagger continua para inspeção técnica, mas não substitui a experiência demonstrável. A tecnologia de front-end **ainda não foi decidida**; selecionar quando o marco correspondente começar, sem fingir que mockups são funcionalidades prontas.
 
 ## 12. Decisões ainda abertas
 
@@ -294,3 +290,18 @@ Não assumir sem discussão:
 - tecnologia de front-end.
 
 Quando uma dessas decisões for tomada, registrar aqui o motivo e a consequência.
+
+
+## 13. Ambientes e limites entre módulos
+
+- **Agora:** portfólio e demonstração com dados sintéticos, sem substituir ERP atual nem importar dados reais sem autorização.
+- **Após aprovação explícita:** pré-produção, homologação, migração autorizada, segurança, backups, integração bancária, suporte, testes de recuperação e implantação gradual.
+- **Arquitetura base mantida:** monólito modular, FastAPI, PostgreSQL, SQLAlchemy e Alembic. Evitar microserviços e novas stacks sem decisão justificada.
+- **Limites separados:** venda/pedido, recebimento de caixa, conta do cliente, carteira de crédito, conta bancária da empresa, cheque, boleto, estoque físico, carga e entrega. Uma ação não implica automaticamente as demais.
+- **Persistência financeira:** usar representação monetária exata (Decimal/NUMERIC ou centavos inteiros a decidir), transações, registros auditáveis e proteção contra lançamento duplicado/repetição da requisição.
+- **Recebimento do motorista:** distingue pagamento do cliente, dinheiro ainda em posse do motorista e transferência confirmada ao caixa. Despesa de fornecedor sai de conta bancária ou cheque, não do caixa da loja salvo operação específica autorizada.
+- **Estoques:** localização depósito/caminhão e quantidades em pedido/carga/entrega são distintas; idempotência e testes contra alocação duplicada.
+- **Segurança:** escopo de organização/filial é verificado na API; acesso em interface não substitui autorização no servidor. Dados sensíveis, logs, cópias de segurança e controle de permissões exigem revisão antes do uso real.
+- **Integrações:** impressão operacional não é documento fiscal; cronograma de boleto não é boleto bancário emitido; cheque recebido não é compensação.
+
+Fluxos detalhados em [PRODUCT_BLUEPRINT.md](PRODUCT_BLUEPRINT.md); decisões comerciais em SPEC; marcos e gates de entrega no ROADMAP.
