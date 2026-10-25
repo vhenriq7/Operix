@@ -4,7 +4,10 @@ Instruções de execução para agentes de IA que colaboram no desenvolvimento d
 
 ## Referências
 
-- `docs/PROJECT.md`: requisitos, regras de negócio, arquitetura, tecnologias, decisões pendentes, marcos e critérios de aceite.
+- `docs/PROJECT.md`: visão curta, stack, módulos e ordem de desenvolvimento.
+- `docs/modules/*.md`: comportamento de cada módulo; consultar apenas o módulo em trabalho.
+- `docs/TECHNICAL.md`: arquitetura, segurança e planejamento técnico.
+- `docs/ROADMAP.md`: marcos, pendências e critérios de aceite detalhados.
 - `README.md`: apresentação e execução local.
 
 Antes de agir, consulte os documentos pertinentes à alteração; não replique conteúdo entre arquivos.
@@ -15,7 +18,7 @@ Antes de agir, consulte os documentos pertinentes à alteração; não replique 
 2. Implemente a menor mudança coesa e verificável, sem introduzir bibliotecas, camadas ou diretórios sem justificativa.
 3. Não presuma regra de negócio ausente: sinalize a decisão pendente antes de implementar comportamento irreversível.
 4. Inclua ou ajuste testes relevantes quando houver ambiente para isso; execute as verificações disponíveis e relate limitações.
-5. Atualize a seção pertinente de `docs/PROJECT.md` quando mudar uma regra de negócio, decisão técnica ou estado de entrega.
+5. Atualize o documento do módulo ao mudar regras; `docs/TECHNICAL.md` para decisões técnicas; `docs/ROADMAP.md` para entregas; e `docs/PROJECT.md` quando mudar a visão ou a sequência geral.
 6. Documente claramente mudanças incompatíveis, migrações e impactos em segurança/dados.
 
 ## Invariantes
