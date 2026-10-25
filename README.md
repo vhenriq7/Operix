@@ -1,25 +1,23 @@
 # Operix
 
-ERP operacional e financeiro multi-filial em desenvolvimento.
+ERP modular para comércio físico: **Vendas, Estoque, CRM, Caixa, Financeiro, Fiscal, Contábil, Frota, Transportes, BI e Mobile**, contratados conforme a necessidade da empresa. Versões web e desktop previstas.
 
-O Operix integra os processos de cadastros, vendas, pedidos, estoque, contas de clientes, caixa, cobrança, logística e gestão financeira de uma organização com filiais. O produto é desenvolvido inicialmente como demonstração funcional com dados sintéticos, visando avaliação empresarial e eventual evolução para produção.
+**Projeto em fase inicial de desenvolvimento**, com demonstração planejada usando dados sintéticos. Não está homologado nem pronto para uso com dados reais.
 
-**Status:** desenvolvimento inicial. Não homologado, não implantado e não indicado para uso com dados reais. O repositório permanece público nesta etapa.
+## Por onde começar
 
-## Documentação
+**Leia só [a visão do projeto](docs/PROJECT.md).** Ela explica o objetivo, a situação atual e a ordem de desenvolvimento.
 
-- [Projeto — visão, tecnologias, módulos e ordem](docs/PROJECT.md).
-- [Especificações de módulos](docs/modules/01-identidade.md) — índice no projeto.
-- [Arquitetura e segurança](docs/TECHNICAL.md) e [roadmap](docs/ROADMAP.md).
-- [AGENTS.md](AGENTS.md) — diretrizes para agentes de IA.
+Se precisar de mais detalhes:
+- [Catálogo dos módulos comerciais](docs/MODULOS.md): o que cada módulo faz.
+- [Regras levantadas](docs/specs/): especificações de referência para a IA.
+- [Roadmap técnico](docs/ROADMAP.md), [arquitetura](docs/TECHNICAL.md) e [instruções para IA](AGENTS.md): consulta apenas quando necessário.
 
-## Implementação atual
+## Código existente
 
-API com Python, FastAPI e Pydantic; PostgreSQL, SQLAlchemy, psycopg e Alembic para persistência de organizações e filiais. Os endpoints de clientes ainda armazenam dados apenas em memória. Autenticação, permissões e isolamento de dados ainda não estão implementados.
+API Python/FastAPI; PostgreSQL, SQLAlchemy e Alembic em organizações/filiais. Clientes ainda são mantidos em memória; login, permissões e módulos comerciais completos **não estão prontos**.
 
-## Executar localmente
-
-Com Python e PostgreSQL configurados, defina `DATABASE_URL` por variável de ambiente, sem versionar credenciais:
+Para execução local, configure o PostgreSQL e a variável `DATABASE_URL` sem versionar senhas:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -27,4 +25,4 @@ alembic upgrade head
 uvicorn app.main:app --reload
 ```
 
-API: `http://127.0.0.1:8000`; OpenAPI: `http://127.0.0.1:8000/docs`. A configuração, o banco e o ambiente são de responsabilidade de quem executa a instância local.
+Documentação da API local: `http://127.0.0.1:8000/docs`.
